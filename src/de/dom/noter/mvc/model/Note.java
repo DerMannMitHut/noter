@@ -4,31 +4,25 @@ public class Note extends Data {
 
 	private String title;
 	private String content;
-	private User creator;
 
-	public Note(final User creator) {
+	public Note() {
 		super();
-		init( creator, "", "" );
+		init( "", "" );
 	}
 
-	private void init( final User creatorUser, final String titleString, final String contentString ) {
-		creator = creatorUser;
+	private void init( final String titleString, final String contentString ) {
 		title = titleString;
 		content = contentString;
 	}
 
 	private Note(final Note note) {
 		super( note );
-		init( note.creator, note.title, note.content );
+		init( note.title, note.content );
 	}
 
-	public Note(final User creator, final long id) {
+	public Note(final long id) {
 		super( id );
-		init( creator, "", "" );
-	}
-
-	public User getCreator() {
-		return creator;
+		init( "", "" );
 	}
 
 	public Note setTitle( final String newTitle ) {
@@ -90,7 +84,7 @@ public class Note extends Data {
 
 	@Override
 	public String toString() {
-		return title + " (" + getId() + ", by " + creator + ")";
+		return title + " (" + getId() + ")";
 	}
 
 }

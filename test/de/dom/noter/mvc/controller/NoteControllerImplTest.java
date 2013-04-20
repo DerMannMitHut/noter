@@ -3,13 +3,12 @@ package de.dom.noter.mvc.controller;
 import junit.framework.TestCase;
 import de.dom.noter.mvc.model.Model;
 import de.dom.noter.mvc.model.Note;
-import de.dom.noter.mvc.model.User;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.SimpleMock;
 
 public class NoteControllerImplTest extends TestCase {
 	private final Model m = new Model();
-	private final Note n = m.createNote( new User() );
+	private final Note n = m.createNote();
 
 	private NoteView v;
 	private NoteControllerImpl nc;

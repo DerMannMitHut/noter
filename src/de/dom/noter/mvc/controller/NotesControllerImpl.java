@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.dom.noter.mvc.model.Model;
-import de.dom.noter.mvc.model.User;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
 
@@ -29,8 +28,8 @@ public class NotesControllerImpl implements NotesController {
 	}
 
 	@Override
-	public void createNewNote( final User creator ) {
-		final long id = model.createNote( creator ).getId();
+	public void createNewNote() {
+		final long id = model.createNote().getId();
 		createAndAddNoteView( id );
 	}
 

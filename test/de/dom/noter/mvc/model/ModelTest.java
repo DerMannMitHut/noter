@@ -9,23 +9,21 @@ public class ModelTest extends TestCase {
 
 	public void testCreateNote() throws Exception {
 		final Model m = new Model();
-		final User u = new User();
 
-		final Note n = m.createNote( u );
+		final Note n = m.createNote();
 		assertTrue( m.hasNote( n.getId() ) );
 	}
 
 	public void testChangeGetNote() throws Exception {
 		final Model m = new Model();
-		final User u = new User();
-		final Note n = m.createNote( u );
+		final Note n = m.createNote();
 
 		final Note n1 = n.setTitle( "bla1" );
 		m.changeNote( n1 );
 		assertEquals( n1, m.getNote( n.getId() ) );
 
 		try {
-			m.changeNote( new Note( u ) );
+			m.changeNote( new Note() );
 			fail();
 		}
 		catch( final NoSuchElementException expected ) {
@@ -41,8 +39,7 @@ public class ModelTest extends TestCase {
 
 	public void testNoteListener() throws Exception {
 		final Model m = new Model();
-		final User u = new User();
-		final Note n = m.createNote( u );
+		final Note n = m.createNote();
 
 		final NoteChangedListener l0 = (NoteChangedListener) SimpleMock.create( NoteChangedListener.class );
 		final NoteChangedListener l1 = (NoteChangedListener) SimpleMock.create( NoteChangedListener.class );
@@ -68,7 +65,7 @@ public class ModelTest extends TestCase {
 		m.addNotesChangedListener( l0 );
 		assertEquals( 1, SimpleMock.getCalls( l0, "onNotesChanged" ) );
 
-		m.createNote( new User() );
+		m.createNote();
 		assertEquals( 2, SimpleMock.getCalls( l0, "onNotesChanged" ) );
 
 		final NotesChangedListener l1 = (NotesChangedListener) SimpleMock.create( NotesChangedListener.class );
@@ -76,7 +73,7 @@ public class ModelTest extends TestCase {
 		m.addNotesChangedListener( l1 );
 		assertEquals( 1, SimpleMock.getCalls( l1, "onNotesChanged" ) );
 
-		m.createNote( new User() );
+		m.createNote();
 		assertEquals( 3, SimpleMock.getCalls( l0, "onNotesChanged" ) );
 		assertEquals( 2, SimpleMock.getCalls( l1, "onNotesChanged" ) );
 	}

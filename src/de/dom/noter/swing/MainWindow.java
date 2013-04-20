@@ -13,7 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
 import de.dom.noter.mvc.controller.NotesController;
-import de.dom.noter.mvc.model.User;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
 
@@ -51,7 +50,7 @@ public class MainWindow extends JFrame implements NotesView {
 			@Override
 			public void actionPerformed( final ActionEvent arg0 ) {
 				// TODO correct user
-				notesController.createNewNote( new User() );
+				notesController.createNewNote();
 			}
 		} );
 

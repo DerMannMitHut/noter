@@ -113,8 +113,8 @@ public class Model {
 		return getNoteChangedListeners( noteId ).contains( v );
 	}
 
-	public Note createNote( final User creator ) {
-		final Note newNote = new Note( creator );
+	public Note createNote() {
+		final Note newNote = new Note();
 		setNote( newNote );
 		return newNote;
 	}

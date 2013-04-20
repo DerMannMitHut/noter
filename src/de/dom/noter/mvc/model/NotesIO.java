@@ -90,7 +90,6 @@ public class NotesIO implements NotesChangedListener {
 		final BufferedWriter w = new BufferedWriter( new FileWriter( idsFile ) );
 		try {
 			w.write( PRE_HEAD + note.getTitle() + POST_HEAD + NL );
-			w.write( PRE_CREATOR + note.getCreator() + NL );
 			w.write( note.getContent() + NL );
 		}
 		finally {
@@ -154,7 +153,6 @@ public class NotesIO implements NotesChangedListener {
 		final BufferedReader r = new BufferedReader( new FileReader( noteFile ) );
 
 		String title = null;
-		String creator = null;
 
 		final StringBuilder content = new StringBuilder();
 
@@ -163,9 +161,6 @@ public class NotesIO implements NotesChangedListener {
 			if( title == null && line.startsWith( PRE_HEAD ) && line.endsWith( POST_HEAD ) ) {
 				title = line.substring( PRE_HEAD.length(), line.length() - POST_HEAD.length() );
 			}
-			else if( creator == null && line.startsWith( PRE_CREATOR ) ) {
-				creator = line.substring( PRE_CREATOR.length() );
-			}
 			else {
 				content.append( line ).append( NL );
 			}
@@ -173,9 +168,7 @@ public class NotesIO implements NotesChangedListener {
 
 		r.close();
 
-		final User creatorUser = new User( creator );
-
-		final Note n = new Note( creatorUser, id ).setTitle( title ).setContent( content.toString() );
+		final Note n = new Note( id ).setTitle( title ).setContent( content.toString() );
 
 		m.setNote( n );
 	}

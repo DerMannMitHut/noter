@@ -5,15 +5,15 @@ import junit.framework.TestCase;
 public class NoteTest extends TestCase {
 
 	public void testUid() throws Exception {
-		final Note n1 = new Note( null );
-		final Note n2 = new Note( null );
+		final Note n1 = new Note();
+		final Note n2 = new Note();
 
 		assertFalse( n1.equals( n2 ) );
 		assertFalse( n1.getId() == n2.getId() );
 	}
 
 	public void testTitle() throws Exception {
-		final Note n = new Note( null );
+		final Note n = new Note();
 
 		assertTrue( n.setTitle( "bla" ).equals( n.setTitle( "bla" ) ) );
 		assertFalse( n.setTitle( "bla" ).equals( n.setTitle( "blubb" ) ) );
@@ -24,7 +24,7 @@ public class NoteTest extends TestCase {
 	}
 
 	public void testContent() throws Exception {
-		final Note n = new Note( null );
+		final Note n = new Note();
 
 		assertTrue( n.setContent( "bla" ).equals( n.setContent( "bla" ) ) );
 		assertFalse( n.setContent( "bla" ).equals( n.setContent( "blubb" ) ) );
@@ -34,19 +34,11 @@ public class NoteTest extends TestCase {
 		assertEquals( "bla", n.setContent( "bla" ).getContent() );
 	}
 
-	public void testCreator() throws Exception {
-		final User creator = new User();
-		final Note n = new Note( creator );
-
-		assertEquals( creator, n.getCreator() );
-	}
-
 	public void testEquals() throws Exception {
-		final User creator = new User();
-		final Note n = new Note( creator );
+		final Note n = new Note();
 		assertFalse( n.equals( null ) );
 		assertFalse( n.equals( new Object() ) );
-		assertFalse( n.equals( new Note( creator ) ) );
+		assertFalse( n.equals( new Note() ) );
 		assertTrue( n.equals( n ) );
 	}
 
