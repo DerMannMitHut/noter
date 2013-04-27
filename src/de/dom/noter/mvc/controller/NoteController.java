@@ -6,4 +6,6 @@ public interface NoteController {
 
 	void setContent( String content );
 
+	void removeNote();
+
 }

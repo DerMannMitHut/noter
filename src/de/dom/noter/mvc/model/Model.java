@@ -25,10 +25,12 @@ public class Model {
 	}
 
 	public Note getNote( final long noteId ) {
-		if( hasNote( noteId ) ) {
-			return notes.get( noteId );
-		}
-		else {
+		checkNote( noteId );
+		return notes.get( noteId );
+	}
+
+	private void checkNote( final long noteId ) {
+		if( !hasNote( noteId ) ) {
 			throw new NoSuchElementException( "noteId=" + noteId );
 		}
 	}
@@ -38,12 +40,8 @@ public class Model {
 	}
 
 	public void changeNote( final Note changedNote ) {
-		if( hasNote( changedNote.getId() ) ) {
-			setNote( changedNote );
-		}
-		else {
-			throw new NoSuchElementException( "note=" + changedNote );
-		}
+		checkNote( changedNote.getId() );
+		setNote( changedNote );
 	}
 
 	Note setNote( final Note newNote ) {
@@ -123,4 +121,9 @@ public class Model {
 		return notesChangedListeners.contains( v );
 	}
 
+	public void removeNote( final long id ) {
+		checkNote( id );
+		notes.remove( id );
+		notifyNotesChangedListeners();
+	}
 }

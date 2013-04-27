@@ -37,4 +37,13 @@ public class NoteControllerImpl implements NoteController {
 		model.changeNote( getNote().setContent( newContent ) );
 	}
 
+	@Override
+	public void removeNote() {
+		model.removeNote( getId() );
+	}
+
+	private long getId() {
+		return getNote().getId();
+	}
+
 }
