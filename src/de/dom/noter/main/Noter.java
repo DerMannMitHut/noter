@@ -4,26 +4,26 @@ import java.io.File;
 
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.NotesControllerImpl;
+import de.dom.noter.mvc.controller.action.ActionControl;
 import de.dom.noter.mvc.model.Model;
 import de.dom.noter.mvc.model.NotesIO;
 import de.dom.noter.swing.MainWindow;
 
 public class Noter {
 
-	private static final File PATH = new File( "/Users/dom/tmp" );
+	private static final File PATH = new File( "/Users/dom/tmp/noter" );
 
 	public static void main( final String[] args ) {
-		final MainWindow mw = new MainWindow();
-		final Model m = NotesIO.createModelFromFiles( PATH );
+		final ActionControl ac = new ActionControl();
+		final MainWindow mw = new MainWindow( ac );
 
-		// for( int i = 0; i < 20; ++i ) {
-		// m.changeNote( m.createNote( dom ).setTitle( "bla" + i ).setContent(
-		// "b\nlu\n\nbb" + i ) );
-		// }
+		final Model m = new Model();
+		final NotesIO io = new NotesIO( m, PATH );
+		io.readModelFromFiles();
+
+		m.addNotesChangedListener( io );
 
 		final NotesController nc = new NotesControllerImpl( m, mw );
-
-		final NotesIO io = new NotesIO( m, PATH );
 
 		mw.open();
 	}

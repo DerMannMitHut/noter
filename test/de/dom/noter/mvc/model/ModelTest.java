@@ -78,4 +78,29 @@ public class ModelTest extends TestCase {
 		assertEquals( 2, SimpleMock.getCalls( l1, "onNotesChanged" ) );
 	}
 
+	public void testIsEmpty() throws Exception {
+		final Model m = new Model();
+		assertTrue( m.isEmpty() );
+		m.createNote();
+		assertFalse( m.isEmpty() );
+	}
+
+	public void testClear() throws Exception {
+		final Model m = new Model();
+		m.createNote();
+		m.clear();
+		assertTrue( m.isEmpty() );
+	}
+
+	public void testEquals() throws Exception {
+		final Model m = new Model();
+		final Model m2 = new Model();
+		m2.createNote();
+
+		assertTrue( m.equals( m ) );
+		assertFalse( m.equals( null ) );
+		assertFalse( m.equals( new Object() ) );
+		assertTrue( m.equals( new Model() ) );
+		assertFalse( m.equals( m2 ) );
+	}
 }

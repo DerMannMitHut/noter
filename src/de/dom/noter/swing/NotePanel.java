@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -14,27 +16,45 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.dom.noter.mvc.controller.NoteController;
+import de.dom.noter.mvc.controller.action.SetContentAction;
+import de.dom.noter.mvc.controller.action.SetTitleAction;
 import de.dom.noter.mvc.model.Note;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.swing.Timer.TimerListener;
 
 public class NotePanel extends JPanel implements NoteView {
 
-	private static final int TYPING_PAUSE = 1000;
+	private static final int TYPING_PAUSE = 500;
 
 	private static final long serialVersionUID = -28761231700267765L;
 
 	private NoteController noteController;
 
 	private final JTextField labelTitle;
+	final TimerListener doSetTitleAction = new TimerListener() {
+		@Override
+		public void onTimerFired() {
+			mainWindow.doAction( new SetTitleAction( noteController, labelTitle.getText() ) );
+		}
+	};
+
 	private final JTextArea areaContent;
+	final TimerListener doSetContentAction = new TimerListener() {
+		@Override
+		public void onTimerFired() {
+			mainWindow.doAction( new SetContentAction( noteController, areaContent.getText() ) );
+		}
+	};
 
 	private final Timer timer;
 
 	private final long id;
 
-	public NotePanel(final Timer timer, final long id) {
+	private final MainWindow mainWindow;
+
+	public NotePanel(final MainWindow mainWindow, final Timer timer, final long id) {
 		super();
+		this.mainWindow = mainWindow;
 		this.timer = timer;
 		this.id = id;
 
@@ -53,12 +73,7 @@ public class NotePanel extends JPanel implements NoteView {
 
 			@Override
 			public void keyTyped( final KeyEvent arg0 ) {
-				timer.fireTimer( TYPING_PAUSE, new TimerListener() {
-					@Override
-					public void onTimerFired() {
-						noteController.setTitle( labelTitle.getText() );
-					}
-				} );
+				timer.fireTimer( TYPING_PAUSE, doSetTitleAction );
 			}
 
 			@Override
@@ -67,6 +82,18 @@ public class NotePanel extends JPanel implements NoteView {
 
 			@Override
 			public void keyPressed( final KeyEvent arg0 ) {
+			}
+		} );
+
+		labelTitle.addFocusListener( new FocusListener() {
+
+			@Override
+			public void focusLost( final FocusEvent e ) {
+				timer.fireTimer( 0, doSetTitleAction );
+			}
+
+			@Override
+			public void focusGained( final FocusEvent e ) {
 			}
 		} );
 

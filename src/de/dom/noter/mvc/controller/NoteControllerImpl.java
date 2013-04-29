@@ -28,18 +28,22 @@ public class NoteControllerImpl implements NoteController {
 	}
 
 	@Override
-	public void setTitle( final String newTitle ) {
-		model.changeNote( getNote().setTitle( newTitle ) );
+	public String setTitle( final String newTitle ) {
+		final Note oldNote = getNote();
+		model.changeNote( oldNote.setTitle( newTitle ) );
+		return oldNote.getTitle();
 	}
 
 	@Override
-	public void setContent( final String newContent ) {
-		model.changeNote( getNote().setContent( newContent ) );
+	public String setContent( final String newContent ) {
+		final Note oldNote = getNote();
+		model.changeNote( oldNote.setContent( newContent ) );
+		return oldNote.getContent();
 	}
 
 	@Override
-	public void removeNote() {
-		model.removeNote( getId() );
+	public Note removeNote() {
+		return model.removeNote( getId() );
 	}
 
 	private long getId() {

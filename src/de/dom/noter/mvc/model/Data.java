@@ -20,6 +20,10 @@ public class Data {
 		this.id = id;
 	}
 
+	protected Data(final long newId, final Data orig) {
+		this( newId );
+	}
+
 	public long getId() {
 		return id;
 	}

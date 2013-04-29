@@ -1,11 +1,13 @@
 package de.dom.noter.mvc.controller;
 
+import de.dom.noter.mvc.model.Note;
+
 public interface NoteController {
 
-	void setTitle( String title );
+	String setTitle( String title );
 
-	void setContent( String content );
+	String setContent( String content );
 
-	void removeNote();
+	Note removeNote();
 
 }

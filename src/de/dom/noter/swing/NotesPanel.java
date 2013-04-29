@@ -70,7 +70,7 @@ public class NotesPanel extends JPanel {
 		for( final long id : newNoteIds ) {
 			NotePanel panel = notePanels.get( id );
 			if( null == panel ) {
-				panel = new NotePanel( timer, id );
+				panel = new NotePanel( mainWindow, timer, id );
 			}
 			newPanels.put( id, panel );
 		}

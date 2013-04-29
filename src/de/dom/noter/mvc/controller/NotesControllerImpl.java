@@ -28,9 +28,10 @@ public class NotesControllerImpl implements NotesController {
 	}
 
 	@Override
-	public void createNewNote() {
+	public long createNewNote() {
 		final long id = model.createNote().getId();
 		createAndAddNoteView( id );
+		return id;
 	}
 
 	private void createAndAddNoteView( final long id ) {
@@ -46,6 +47,11 @@ public class NotesControllerImpl implements NotesController {
 
 	public Object getView() {
 		return view;
+	}
+
+	@Override
+	public void removeNote( final long noteId ) {
+		model.removeNote( noteId );
 	}
 
 }

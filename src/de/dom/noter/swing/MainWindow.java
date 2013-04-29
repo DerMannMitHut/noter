@@ -13,6 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
 import de.dom.noter.mvc.controller.NotesController;
+import de.dom.noter.mvc.controller.action.Action;
+import de.dom.noter.mvc.controller.action.ActionControl;
+import de.dom.noter.mvc.controller.action.CreateNewNoteAction;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
 
@@ -27,9 +30,11 @@ public class MainWindow extends JFrame implements NotesView {
 
 	private NotesController notesController;
 	private NotesPanel notesPanel;
+	private final ActionControl actionControl;
 
-	public MainWindow() {
+	public MainWindow(final ActionControl actionControl) {
 		super( "Noter" );
+		this.actionControl = actionControl;
 
 		create();
 	}
@@ -49,8 +54,8 @@ public class MainWindow extends JFrame implements NotesView {
 
 			@Override
 			public void actionPerformed( final ActionEvent arg0 ) {
-				// TODO correct user
-				notesController.createNewNote();
+				final Action action = new CreateNewNoteAction( notesController );
+				doAction( action );
 			}
 		} );
 
@@ -101,6 +106,10 @@ public class MainWindow extends JFrame implements NotesView {
 	@Override
 	public void onNoteChanged( final Long id ) {
 		// ignore
+	}
+
+	protected void doAction( final Action action ) {
+		actionControl.doAction( action );
 	}
 
 }

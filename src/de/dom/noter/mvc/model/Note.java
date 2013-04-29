@@ -2,12 +2,20 @@ package de.dom.noter.mvc.model;
 
 public class Note extends Data {
 
+	private static final String UNTITLED = new String( "<untitled>" );
+	private static final String NO_CONTENT = new String( "" );
+
 	private String title;
 	private String content;
 
 	public Note() {
 		super();
-		init( "", "" );
+		init( UNTITLED, NO_CONTENT );
+	}
+
+	public Note(final long id) {
+		super( id );
+		init( UNTITLED, NO_CONTENT );
 	}
 
 	private void init( final String titleString, final String contentString ) {
@@ -16,18 +24,17 @@ public class Note extends Data {
 	}
 
 	private Note(final Note note) {
-		super( note );
-		init( note.title, note.content );
+		this( note.getId(), note );
 	}
 
-	public Note(final long id) {
-		super( id );
-		init( "", "" );
+	private Note(final long newId, final Note note) {
+		super( newId, note );
+		init( note.title, note.content );
 	}
 
 	public Note setTitle( final String newTitle ) {
 		final Note n = new Note( this );
-		n.title = newTitle;
+		n.title = ((newTitle == null) || (newTitle.isEmpty())) ? UNTITLED : newTitle;
 		return n;
 	}
 
@@ -37,7 +44,7 @@ public class Note extends Data {
 
 	public Note setContent( final String newContent ) {
 		final Note n = new Note( this );
-		n.content = newContent;
+		n.content = ((newContent == null) || (newContent.isEmpty())) ? NO_CONTENT : newContent.replace( "\r", "" );
 		return n;
 	}
 
@@ -63,28 +70,44 @@ public class Note extends Data {
 			return false;
 		}
 		final Note other = (Note) obj;
-		if( content == null ) {
-			if( other.content != null ) {
-				return false;
-			}
+
+		if( hasContent() != other.hasContent() ) {
+			return false;
 		}
 		else if( !content.equals( other.content ) ) {
 			return false;
 		}
-		if( title == null ) {
-			if( other.title != null ) {
-				return false;
-			}
+
+		if( hasTitle() != other.hasTitle() ) {
+			return false;
 		}
 		else if( !title.equals( other.title ) ) {
 			return false;
 		}
+
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return title + " (" + getId() + ")";
+	}
+
+	public boolean hasTitle() {
+		return UNTITLED != title;
+	}
+
+	public boolean hasContent() {
+		return NO_CONTENT != content;
+	}
+
+	public Note setId( final long newId ) {
+		if( newId == getId() ) {
+			return this;
+		}
+		else {
+			return new Note( newId, this );
+		}
 	}
 
 }

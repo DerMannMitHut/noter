@@ -42,4 +42,33 @@ public class NoteTest extends TestCase {
 		assertTrue( n.equals( n ) );
 	}
 
+	public void testHasTitle() throws Exception {
+		checkHasTitle( new Note() );
+		checkHasTitle( new Note( 42L ) );
+	}
+
+	private void checkHasTitle( final Note n ) {
+		assertFalse( n.hasTitle() );
+		assertTrue( n.setTitle( "bla" ).hasTitle() );
+		assertFalse( n.setTitle( "bla" ).setTitle( "" ).hasTitle() );
+		assertFalse( n.setTitle( "bla" ).setTitle( null ).hasTitle() );
+		assertFalse( n.setTitle( n.getTitle() ).hasTitle() );
+		assertTrue( n.setTitle( new String( n.getTitle() ) ).hasTitle() );
+
+		assertFalse( n.equals( n.setTitle( new String( n.getTitle() ) ) ) );
+	}
+
+	public void testHasContent() throws Exception {
+		checkHasContent( new Note() );
+		checkHasContent( new Note( 23L ) );
+	}
+
+	private void checkHasContent( final Note n ) {
+		assertFalse( n.hasContent() );
+		assertTrue( n.setContent( "bla" ).hasContent() );
+		assertFalse( n.setContent( "bla" ).setContent( "" ).hasContent() );
+		assertFalse( n.setContent( "bla" ).setContent( null ).hasContent() );
+		assertFalse( n.setContent( n.getContent() ).hasContent() );
+	}
+
 }

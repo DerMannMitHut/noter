@@ -45,6 +45,10 @@ public class Model {
 	}
 
 	Note setNote( final Note newNote ) {
+		if( null == newNote ) {
+			return null;
+		}
+
 		final long noteId = newNote.getId();
 		final Note oldNote = notes.put( noteId, newNote );
 
@@ -121,9 +125,55 @@ public class Model {
 		return notesChangedListeners.contains( v );
 	}
 
-	public void removeNote( final long id ) {
+	public Note removeNote( final long id ) {
 		checkNote( id );
-		notes.remove( id );
+		final Note oldNote = notes.remove( id );
 		notifyNotesChangedListeners();
+		return oldNote;
+	}
+
+	public boolean isEmpty() {
+		return notes.isEmpty();
+	}
+
+	public void clear() {
+		notes.clear();
+		notifyNotesChangedListeners();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals( final Object obj ) {
+		if( this == obj ) {
+			return true;
+		}
+		if( obj == null ) {
+			return false;
+		}
+		if( getClass() != obj.getClass() ) {
+			return false;
+		}
+		final Model other = (Model) obj;
+		if( notes == null ) {
+			if( other.notes != null ) {
+				return false;
+			}
+		}
+		else if( !notes.equals( other.notes ) ) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return notes.keySet().toString();
 	}
 }
