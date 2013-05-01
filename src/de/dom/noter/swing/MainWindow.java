@@ -57,6 +57,7 @@ public class MainWindow extends JFrame implements NotesView {
 		contentPane.add( buttonCreateNote );
 
 		final JScrollPane scrollPane = new JScrollPane( notesPanel );
+		scrollPane.getVerticalScrollBar().setUnitIncrement( 16 );
 
 		layout.putConstraint( WEST, scrollPane, 10, WEST, contentPane );
 		layout.putConstraint( NORTH, scrollPane, 5, SOUTH, buttonCreateNote );
@@ -97,7 +98,7 @@ public class MainWindow extends JFrame implements NotesView {
 	@Override
 	public void setController( final NotesController newNotesController ) {
 		notesController = newNotesController;
-		actions = new ActionRegistry( notesController, commandControl );
+		actions = new ActionRegistry( notesController, commandControl, this );
 	}
 
 	@Override
@@ -113,6 +114,14 @@ public class MainWindow extends JFrame implements NotesView {
 	@Override
 	public void onNoteChanged( final Long id ) {
 		// ignore
+	}
+
+	public void selectFirstTitle() {
+		NoteView last = null;
+		for( final NoteView v : getNoteViews().values() ) {
+			last = v;
+		}
+		((NotePanel) last).selectTitle();
 	}
 
 }

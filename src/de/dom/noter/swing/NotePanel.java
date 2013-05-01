@@ -97,6 +97,14 @@ public class NotePanel extends JPanel implements NoteView {
 			}
 		} );
 
+		labelTitle.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed( final ActionEvent e ) {
+				areaContent.requestFocusInWindow();
+			}
+		} );
+
 		final JButton removeButton = new JButton( "Ð" );
 		removeButton.addActionListener( new ActionListener() {
 			@Override
@@ -168,6 +176,10 @@ public class NotePanel extends JPanel implements NoteView {
 
 	public long getId() {
 		return id;
+	}
+
+	public void selectTitle() {
+		labelTitle.requestFocusInWindow();
 	}
 
 }
