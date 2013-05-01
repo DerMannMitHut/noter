@@ -56,7 +56,7 @@ public class NotesIO implements NotesChangedListener {
 		createModelFromNotes( noteIds );
 	}
 
-	public void importNotesFromFile( final File notesFile ) {
+	public static void importNotesFromFile( final File notesFile, final Model model ) {
 		BufferedReader r = null;
 		try {
 			r = new BufferedReader( new FileReader( notesFile ) );
@@ -213,7 +213,7 @@ public class NotesIO implements NotesChangedListener {
 		}
 	}
 
-	public void exportModel( final File notesFile ) {
+	public static void exportModel( final File notesFile, final Model model ) {
 		BufferedWriter w = null;
 		try {
 			w = new BufferedWriter( new FileWriter( notesFile ) );
@@ -252,7 +252,7 @@ public class NotesIO implements NotesChangedListener {
 		String sep = "";
 		for( final long id : m.getNoteIds() ) {
 			w.append( sep );
-			sep = NOTES_SEPARATOR;
+			sep = NOTES_SEPARATOR + NL;
 
 			final Note note = m.getNote( id );
 

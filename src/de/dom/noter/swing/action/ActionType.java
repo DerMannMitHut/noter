@@ -8,7 +8,7 @@ import javax.swing.Action;
 
 public enum ActionType {
 
-	CREATE_NEW_NOTE(CreateNewNoteAction.class);
+	CREATE_NEW_NOTE(CreateNewNoteAction.class), EXPORT_TO_FILE(ExportToFileAction.class);
 
 	private final Class<?> actionClass;
 

@@ -74,6 +74,7 @@ public class NotesIOTest extends TestCase {
 	public void testModel() throws Exception {
 		final Model model = new Model();
 		model.createNote();
+		model.createNote();
 		NotesIO.exportModelToWriter( w, model );
 		final Model modelFromReader = new Model();
 		NotesIO.importNotesFromReader( modelFromReader, r );

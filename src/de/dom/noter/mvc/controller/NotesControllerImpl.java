@@ -1,10 +1,12 @@
 package de.dom.noter.mvc.controller;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.dom.noter.mvc.model.Model;
+import de.dom.noter.mvc.model.NotesIO;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
 
@@ -53,4 +55,8 @@ public class NotesControllerImpl implements NotesController {
 		model.removeNote( noteId );
 	}
 
+	@Override
+	public void exportAllNotes( final File fileToSave ) {
+		NotesIO.exportModel( fileToSave, model );
+	}
 }
