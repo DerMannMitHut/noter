@@ -23,19 +23,17 @@ public class NotesControllerImpl implements NotesController {
 
 		model.addNotesChangedListener( view );
 
-		for( final long id : model.getNoteIds() ) {
-			createAndAddNoteView( id );
-		}
+		createAndAddControllers( model.getNoteIds() );
 	}
 
 	@Override
 	public long createNewNote() {
 		final long id = model.createNote().getId();
-		createAndAddNoteView( id );
+		createAndAddNoteController( id );
 		return id;
 	}
 
-	private void createAndAddNoteView( final long id ) {
+	private void createAndAddNoteController( final long id ) {
 		final Map<Long, ? extends NoteView> noteViews = view.getNoteViews();
 		final NoteView noteView = noteViews.get( id );
 		final NoteController nc = new NoteControllerImpl( model, id, noteView );
@@ -58,5 +56,18 @@ public class NotesControllerImpl implements NotesController {
 	@Override
 	public void exportAllNotes( final File fileToSave ) {
 		NotesIO.exportModel( fileToSave, model );
+	}
+
+	@Override
+	public Collection<Long> importAllNotes( final File fileToRead ) {
+		final Collection<Long> ids = NotesIO.importNotesFromFile( fileToRead, model );
+		createAndAddControllers( ids );
+		return ids;
+	}
+
+	private void createAndAddControllers( final Collection<Long> ids ) {
+		for( final long id : ids ) {
+			createAndAddNoteController( id );
+		}
 	}
 }

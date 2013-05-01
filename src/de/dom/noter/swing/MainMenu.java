@@ -22,7 +22,7 @@ public class MainMenu extends JMenuBar {
 		final JMenu menu = new JMenu( "File" );
 		add( menu );
 
-		menu.add( new JMenuItem( "Import" ) );
+		menu.add( new JMenuItem( mainWindow.getAction( ActionType.IMPORT_FROM_FILE ) ) );
 		menu.add( new JMenuItem( mainWindow.getAction( ActionType.EXPORT_TO_FILE ) ) );
 	}
 

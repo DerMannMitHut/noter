@@ -9,6 +9,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ import de.dom.noter.mvc.controller.command.SetContentCommand;
 import de.dom.noter.mvc.controller.command.SetTitleCommand;
 import de.dom.noter.mvc.model.Note;
 import de.dom.noter.mvc.view.NoteView;
+import de.dom.noter.swing.action.AbstractNoterAction;
 
 public class NotePanel extends JPanel implements NoteView {
 
@@ -106,13 +108,17 @@ public class NotePanel extends JPanel implements NoteView {
 			}
 		} );
 
-		final JButton removeButton = new JButton( "Ð" );
-		removeButton.addActionListener( new ActionListener() {
+		final AbstractNoterAction removeAction = new AbstractNoterAction() {
+			{
+				putValue( Action.NAME, "Ð" );
+			}
+
 			@Override
 			public void actionPerformed( final ActionEvent e ) {
 				noteController.removeNote();
 			}
-		} );
+		};
+		final JButton removeButton = new JButton( removeAction );
 
 		final JPanel buttonBar = new JPanel();
 		buttonBar.add( removeButton );

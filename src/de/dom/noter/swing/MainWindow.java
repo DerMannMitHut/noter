@@ -58,6 +58,7 @@ public class MainWindow extends JFrame implements NotesView {
 
 		final JScrollPane scrollPane = new JScrollPane( notesPanel );
 		scrollPane.getVerticalScrollBar().setUnitIncrement( 16 );
+		scrollPane.getHorizontalScrollBar().setUnitIncrement( 16 );
 
 		layout.putConstraint( WEST, scrollPane, 10, WEST, contentPane );
 		layout.putConstraint( NORTH, scrollPane, 5, SOUTH, buttonCreateNote );

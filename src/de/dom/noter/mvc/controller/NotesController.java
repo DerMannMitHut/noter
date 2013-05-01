@@ -1,6 +1,7 @@
 package de.dom.noter.mvc.controller;
 
 import java.io.File;
+import java.util.Collection;
 
 public interface NotesController {
 
@@ -9,5 +10,7 @@ public interface NotesController {
 	void removeNote( long noteId );
 
 	void exportAllNotes( File fileToSave );
+
+	Collection<Long> importAllNotes( File fileToRead );
 
 }

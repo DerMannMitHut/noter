@@ -3,7 +3,6 @@ package de.dom.noter.swing.action;
 import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
@@ -22,7 +21,7 @@ public class CreateNewNoteAction extends AbstractNoterAction {
 		putValue( Action.NAME, "New Note" );
 		putValue( Action.SHORT_DESCRIPTION, "Creates a new note." );
 		putValue( Action.LONG_DESCRIPTION, getValue( Action.SHORT_DESCRIPTION ) );
-		putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( "meta N" ) );
+		putValue( Action.ACCELERATOR_KEY, getShortcutStroke( 'N' ) );
 	}
 
 	@Override

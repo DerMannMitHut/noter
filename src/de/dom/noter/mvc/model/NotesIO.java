@@ -56,11 +56,11 @@ public class NotesIO implements NotesChangedListener {
 		createModelFromNotes( noteIds );
 	}
 
-	public static void importNotesFromFile( final File notesFile, final Model model ) {
+	public static Collection<Long> importNotesFromFile( final File notesFile, final Model model ) {
 		BufferedReader r = null;
 		try {
 			r = new BufferedReader( new FileReader( notesFile ) );
-			importNotesFromReader( model, r );
+			return importNotesFromReader( model, r );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
@@ -130,24 +130,37 @@ public class NotesIO implements NotesChangedListener {
 		return readNoteFromReader( null, r );
 	}
 
-	static void importNotesFromReader( final Model m, final BufferedReader r ) throws IOException {
+	static Collection<Long> importNotesFromReader( final Model m, final BufferedReader r ) throws IOException {
+		final ArrayList<Long> ids = new ArrayList<Long>();
 		while( r.ready() ) {
-			m.setNote( readNoteFromReader( NOTES_SEPARATOR, r ) );
+			final Note note = readNoteFromReader( NOTES_SEPARATOR, r );
+			m.setNote( note );
+			ids.add( note.getId() );
 		}
+
+		return Collections.unmodifiableList( ids );
 	}
 
 	static Note readNoteFromReader( final String notesSeparator, final BufferedReader r ) throws IOException {
 		Note result = new Note();
 
 		final StringBuilder content = new StringBuilder();
+		int nullcount = 0;
 
+		String nlSep = "";
 		while( r.ready() ) {
 			final String line = r.readLine();
-			if( line.equalsIgnoreCase( notesSeparator ) ) {
-				final int firstNlInContent = content.indexOf( NL );
-				if( !result.hasTitle() && firstNlInContent > 0 ) {
-					result = result.setTitle( content.substring( 0, firstNlInContent ) );
+			if( null == line ) {
+				nullcount += 1;
+				if( nullcount > 10 ) {
+					break;
 				}
+				else {
+					sleepAWhile( nullcount * 3 );
+					continue;
+				}
+			}
+			else if( line.equalsIgnoreCase( notesSeparator ) ) {
 				break;
 			}
 			else if( !result.hasTitle() && line.startsWith( PRE_ID ) && line.endsWith( POST_ID ) ) {
@@ -164,13 +177,31 @@ public class NotesIO implements NotesChangedListener {
 				continue;
 			}
 
-			content.append( line );
-			if( r.ready() ) {
-				content.append( NL );
-			}
+			content.append( nlSep ).append( line );
+
+			nlSep = NL;
+			nullcount = 0;
 		}
 
-		return result.setContent( content.toString() );
+		final String contentString = content.toString();
+
+		if( !result.hasTitle() ) {
+			result = setTitleFromContent( result, contentString );
+		}
+
+		return result.setContent( contentString );
+	}
+
+	private static Note setTitleFromContent( Note result, final String content ) {
+		final String trimmed = content.trim();
+		final int firstNlInContent = trimmed.indexOf( NL );
+		if( firstNlInContent >= 0 ) {
+			result = result.setTitle( trimmed.substring( 0, firstNlInContent ) );
+		}
+		else {
+			result = result.setTitle( trimmed.toString() );
+		}
+		return result;
 	}
 
 	private static void closeIgnoreException( final Reader r ) {
@@ -276,6 +307,14 @@ public class NotesIO implements NotesChangedListener {
 
 	private File getNoteFile( final long id ) {
 		return new File( path, Long.toHexString( id ) + NOTE_EXTENSION );
+	}
+
+	private static void sleepAWhile( final int timeToSleep ) {
+		try {
+			Thread.sleep( timeToSleep );
+		}
+		catch( final InterruptedException ignore ) {
+		}
 	}
 
 }
