@@ -15,12 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import de.dom.noter.framework.Timer;
+import de.dom.noter.framework.Timer.TimerListener;
 import de.dom.noter.mvc.controller.NoteController;
 import de.dom.noter.mvc.controller.command.SetContentCommand;
 import de.dom.noter.mvc.controller.command.SetTitleCommand;
 import de.dom.noter.mvc.model.Note;
 import de.dom.noter.mvc.view.NoteView;
-import de.dom.noter.swing.Timer.TimerListener;
 
 public class NotePanel extends JPanel implements NoteView {
 

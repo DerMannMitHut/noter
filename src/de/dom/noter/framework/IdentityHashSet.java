@@ -1,4 +1,4 @@
-package de.dom.noter.collections;
+package de.dom.noter.framework;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;

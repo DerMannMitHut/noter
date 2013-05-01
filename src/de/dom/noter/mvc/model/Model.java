@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import de.dom.noter.collections.IdentityHashSet;
+import de.dom.noter.framework.IdentityHashSet;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
 

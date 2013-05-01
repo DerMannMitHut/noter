@@ -1,4 +1,4 @@
-package de.dom.noter.swing;
+package de.dom.noter.framework;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;

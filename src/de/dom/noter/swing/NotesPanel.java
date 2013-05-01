@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import de.dom.noter.framework.Timer;
+
 public class NotesPanel extends JPanel {
 
 	private static final long serialVersionUID = -5580939459033087664L;

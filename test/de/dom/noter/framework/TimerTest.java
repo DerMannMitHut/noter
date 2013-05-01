@@ -1,7 +1,8 @@
-package de.dom.noter.swing;
+package de.dom.noter.framework;
 
 import junit.framework.TestCase;
-import de.dom.noter.swing.Timer.TimerListener;
+import de.dom.noter.framework.Timer;
+import de.dom.noter.framework.Timer.TimerListener;
 
 public class TimerTest extends TestCase {
 
