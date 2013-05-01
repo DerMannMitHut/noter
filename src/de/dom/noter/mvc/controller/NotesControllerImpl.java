@@ -19,7 +19,6 @@ public class NotesControllerImpl implements NotesController {
 		this.view = view;
 		noteControllers = new HashMap<Long, NoteController>();
 
-		view.setController( this );
 		model.addNotesChangedListener( view );
 
 		for( final long id : model.getNoteIds() ) {

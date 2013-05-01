@@ -1,16 +1,18 @@
-package de.dom.noter.mvc.controller.action;
+package de.dom.noter.mvc.controller.command;
 
+import de.dom.noter.mvc.controller.command.MacroCommand;
+import de.dom.noter.mvc.controller.command.UndoableCommand;
 import junit.framework.TestCase;
 
-public class MacroActionTest extends TestCase {
+public class MacroCommandTest extends TestCase {
 
 	int redoCount;
 	int undoCount;
 	int stepSize;
 
-	Action action1;
-	Action action2;
-	MacroAction macroAction;
+	UndoableCommand command1;
+	UndoableCommand command2;
+	MacroCommand macroAction;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -18,7 +20,7 @@ public class MacroActionTest extends TestCase {
 		undoCount = 0;
 		stepSize = 1;
 
-		action1 = new Action() {
+		command1 = new UndoableCommand() {
 			@Override
 			public void undo() {
 				undoCount += stepSize;
@@ -32,7 +34,7 @@ public class MacroActionTest extends TestCase {
 			}
 		};
 
-		action2 = new Action() {
+		command2 = new UndoableCommand() {
 			@Override
 			public void undo() {
 				undoCount -= stepSize;
@@ -46,39 +48,39 @@ public class MacroActionTest extends TestCase {
 			}
 		};
 
-		macroAction = new MacroAction();
+		macroAction = new MacroCommand();
 	}
 
 	public void testSize() throws Exception {
 		assertEquals( 0, macroAction.size() );
-		macroAction.add( action1 );
+		macroAction.add( command1 );
 		assertEquals( 1, macroAction.size() );
 	}
 
 	public void testRedoA() throws Exception {
-		macroAction.add( action1 );
-		macroAction.add( action2 );
+		macroAction.add( command1 );
+		macroAction.add( command2 );
 		macroAction.redo();
 		assertEquals( -1, redoCount );
 	}
 
 	public void testRedoB() throws Exception {
-		macroAction.add( action2 );
-		macroAction.add( action1 );
+		macroAction.add( command2 );
+		macroAction.add( command1 );
 		macroAction.redo();
 		assertEquals( 1, redoCount );
 	}
 
 	public void testUndoA() throws Exception {
-		macroAction.add( action1 );
-		macroAction.add( action2 );
+		macroAction.add( command1 );
+		macroAction.add( command2 );
 		macroAction.undo();
 		assertEquals( 1, undoCount );
 	}
 
 	public void testUndoB() throws Exception {
-		macroAction.add( action2 );
-		macroAction.add( action1 );
+		macroAction.add( command2 );
+		macroAction.add( command1 );
 		macroAction.undo();
 		assertEquals( -1, undoCount );
 	}

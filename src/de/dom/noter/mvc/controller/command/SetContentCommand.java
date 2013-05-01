@@ -1,14 +1,14 @@
-package de.dom.noter.mvc.controller.action;
+package de.dom.noter.mvc.controller.command;
 
 import de.dom.noter.mvc.controller.NoteController;
 
-public class SetContentAction implements Action {
+public class SetContentCommand implements UndoableCommand {
 
 	NoteController noteController;
 	private final String newContent;
 	private String oldContent;
 
-	public SetContentAction(final NoteController noteController, final String newContent) {
+	public SetContentCommand(final NoteController noteController, final String newContent) {
 		this.noteController = noteController;
 		this.newContent = newContent;
 	}

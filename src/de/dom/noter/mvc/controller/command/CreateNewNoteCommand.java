@@ -1,13 +1,13 @@
-package de.dom.noter.mvc.controller.action;
+package de.dom.noter.mvc.controller.command;
 
 import de.dom.noter.mvc.controller.NotesController;
 
-public class CreateNewNoteAction implements Action {
+public class CreateNewNoteCommand implements UndoableCommand {
 
 	NotesController notesController;
 	private long createdId;
 
-	public CreateNewNoteAction(final NotesController notesController) {
+	public CreateNewNoteCommand(final NotesController notesController) {
 		this.notesController = notesController;
 	}
 

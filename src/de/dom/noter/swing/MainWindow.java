@@ -2,22 +2,22 @@ package de.dom.noter.swing;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
 import de.dom.noter.mvc.controller.NotesController;
-import de.dom.noter.mvc.controller.action.Action;
-import de.dom.noter.mvc.controller.action.ActionControl;
-import de.dom.noter.mvc.controller.action.CreateNewNoteAction;
+import de.dom.noter.mvc.controller.command.CommandControl;
+import de.dom.noter.mvc.controller.command.UndoableCommand;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
+import de.dom.noter.swing.action.ActionRegistry;
+import de.dom.noter.swing.action.ActionType;
 
 public class MainWindow extends JFrame implements NotesView {
 
@@ -28,42 +28,38 @@ public class MainWindow extends JFrame implements NotesView {
 
 	private static final long serialVersionUID = -218773183357310209L;
 
+	private final CommandControl commandControl;
+	private final NotesPanel notesPanel;
+
 	private NotesController notesController;
-	private NotesPanel notesPanel;
-	private final ActionControl actionControl;
+	ActionRegistry actions;
 
-	public MainWindow(final ActionControl actionControl) {
+	public MainWindow(final CommandControl commandControl) {
 		super( "Noter" );
-		this.actionControl = actionControl;
-
-		create();
+		this.commandControl = commandControl;
+		notesPanel = new NotesPanel( this );
 	}
 
 	private void create() {
+		final MainMenu mainMenu = new MainMenu( this );
+		setJMenuBar( mainMenu );
+
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		final Container contentPane = getContentPane();
 
 		final SpringLayout layout = new SpringLayout();
 		setLayout( layout );
 
-		final JButton buttonPlus = new JButton( "+" );
-		layout.putConstraint( EAST, buttonPlus, -10, EAST, contentPane );
-		layout.putConstraint( NORTH, buttonPlus, 10, NORTH, contentPane );
-		contentPane.add( buttonPlus );
-		buttonPlus.addActionListener( new ActionListener() {
+		final JButton buttonCreateNote = new JButton();
+		buttonCreateNote.setAction( getAction( ActionType.CREATE_NEW_NOTE ) );
+		layout.putConstraint( EAST, buttonCreateNote, -10, EAST, contentPane );
+		layout.putConstraint( NORTH, buttonCreateNote, 10, NORTH, contentPane );
+		contentPane.add( buttonCreateNote );
 
-			@Override
-			public void actionPerformed( final ActionEvent arg0 ) {
-				final Action action = new CreateNewNoteAction( notesController );
-				doAction( action );
-			}
-		} );
-
-		notesPanel = new NotesPanel( this );
 		final JScrollPane scrollPane = new JScrollPane( notesPanel );
 
 		layout.putConstraint( WEST, scrollPane, 10, WEST, contentPane );
-		layout.putConstraint( NORTH, scrollPane, 5, SOUTH, buttonPlus );
+		layout.putConstraint( NORTH, scrollPane, 5, SOUTH, buttonCreateNote );
 		layout.putConstraint( EAST, scrollPane, -10, EAST, contentPane );
 		layout.putConstraint( SOUTH, scrollPane, -10, SOUTH, contentPane );
 		contentPane.add( scrollPane );
@@ -74,7 +70,17 @@ public class MainWindow extends JFrame implements NotesView {
 		pack();
 	}
 
+	public Action getAction( final ActionType actionType ) {
+		return actions.get( actionType );
+	}
+
+	public void doCommand( final UndoableCommand command ) {
+		commandControl.doCommand( command );
+	}
+
 	public void open() {
+		create();
+
 		javax.swing.SwingUtilities.invokeLater( new Runnable() {
 			@Override
 			public void run() {
@@ -91,6 +97,7 @@ public class MainWindow extends JFrame implements NotesView {
 	@Override
 	public void setController( final NotesController newNotesController ) {
 		notesController = newNotesController;
+		actions = new ActionRegistry( notesController, commandControl );
 	}
 
 	@Override
@@ -106,10 +113,6 @@ public class MainWindow extends JFrame implements NotesView {
 	@Override
 	public void onNoteChanged( final Long id ) {
 		// ignore
-	}
-
-	protected void doAction( final Action action ) {
-		actionControl.doAction( action );
 	}
 
 }
