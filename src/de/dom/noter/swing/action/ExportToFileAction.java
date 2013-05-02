@@ -2,6 +2,7 @@ package de.dom.noter.swing.action;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 
 import javax.swing.Action;
 
@@ -14,6 +15,10 @@ import de.dom.noter.swing.FileChooser.Mode;
 import de.dom.noter.swing.MainWindow;
 
 public class ExportToFileAction extends AbstractNoterAction {
+
+	private static final String ACTION_NAME = "Export notes…";
+	private static final String ACTION_DESCRIPTION = "Create a human readable file, wich contains all notes.";
+
 	private final CommandControl commandControl;
 	private final NotesController notesController;
 	private final MainWindow mainWindow;
@@ -22,14 +27,21 @@ public class ExportToFileAction extends AbstractNoterAction {
 		this.commandControl = commandControl;
 		this.notesController = notesController;
 		this.mainWindow = mainWindow;
-		putValue( Action.NAME, "Export notes…" );
-		putValue( Action.SHORT_DESCRIPTION, "Create a human readable file, wich contains all notes." );
-		putValue( Action.LONG_DESCRIPTION, getValue( Action.SHORT_DESCRIPTION ) );
+		putValue( Action.NAME, ACTION_NAME );
+		putValue( Action.SHORT_DESCRIPTION, ACTION_DESCRIPTION );
+		putValue( Action.LONG_DESCRIPTION, ACTION_DESCRIPTION );
 	}
 
 	@Override
 	public void actionPerformed( final ActionEvent e ) {
-		final FileChooser chooser = new FileChooser( mainWindow, "Export notes…", Mode.SAVE_FILE );
+		final FileChooser chooser = new FileChooser( mainWindow, ACTION_NAME, Mode.SAVE_FILE );
+		chooser.setFilename( "notes.txt" );
+		chooser.setFilenameFilter( new FilenameFilter() {
+			@Override
+			public boolean accept( final File dir, final String name ) {
+				return name.endsWith( ".txt" );
+			}
+		} );
 		chooser.openDialog( new FileSelectionHandler() {
 			@Override
 			public void onFileSelected( final File file ) {

@@ -80,4 +80,20 @@ public class FileChooser {
 		}
 	}
 
+	public void setFilename( final String filename ) {
+		dialog.setFile( filename );
+	}
+
+	public void setDirectory( final String dirname ) {
+		dialog.setDirectory( dirname );
+	}
+
+	public void setFile( final File file ) {
+		setFilename( file.getName() );
+		setDirectory( file.getParent() );
+	}
+
+	public void setFilenameFilter( final FilenameFilter filter ) {
+		dialog.setFilenameFilter( filter );
+	}
 }
