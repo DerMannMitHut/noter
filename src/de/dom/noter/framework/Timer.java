@@ -20,10 +20,25 @@ public class Timer extends Thread {
 		isRunning = false;
 		listeners = new IdentityHashMap<TimerListener, Long>();
 		newListeners = new IdentityHashMap<TimerListener, Long>();
+
+		Runtime.getRuntime().addShutdownHook( new Thread() {
+			@Override
+			public void run() {
+				end();
+				notifyAllListeners();			
+			}
+
+			private void notifyAllListeners() {
+				for( final TimerListener listener : listeners.keySet() ) {
+					listener.onTimerFired();
+				}
+			}
+		} );
+
 	}
 
 	@Override
-	public void run() {
+	synchronized public void run() {
 		isRunning = true;
 		long lastNow = getTime();
 		while( isRunning ) {
@@ -71,7 +86,7 @@ public class Timer extends Thread {
 		return System.currentTimeMillis();
 	}
 
-	synchronized private void sleepAWhile() {
+	private void sleepAWhile() {
 		try {
 			wait( nextSleepInterval );
 		}
@@ -83,13 +98,27 @@ public class Timer extends Thread {
 		return isRunning;
 	}
 
-	public void end() {
+	synchronized public void end() {
 		isRunning = false;
+		notify();
 	}
 
+	/**
+	 * @param ms
+	 *            time to wait in milliseconds
+	 * @param listener
+	 *            the listener to inform after the time
+	 * @throws IllegalStateException
+	 *             if the timer is not running
+	 */
 	synchronized public void fireTimer( final long ms, final TimerListener listener ) {
-		newListeners.put( listener, ms );
-		notify();
+		if( isRunning ) {
+			newListeners.put( listener, ms );
+			notify();
+		}
+		else {
+			throw new IllegalStateException( "Timer is not running!" );
+		}
 	}
 
 }

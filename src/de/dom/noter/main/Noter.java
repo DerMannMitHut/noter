@@ -31,27 +31,12 @@ public class Noter {
 		mw.setController( nc );
 
 		mw.open();
-
-		Runtime.getRuntime().addShutdownHook( getWaitForSaveThread() );
 	}
 
 	static void initGuiLookAndFeel() throws Exception {
 		System.setProperty( "apple.laf.useScreenMenuBar", "true" );
 		System.setProperty( "com.apple.mrj.application.apple.menu.about.name", "Noter" );
+		System.setProperty( "apple.awt.brushMetalLook", "true" );
 		UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 	}
-
-	private static Thread getWaitForSaveThread() {
-		return new Thread() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep( 1000 );
-				}
-				catch( final InterruptedException ignore ) {
-				}
-			}
-		};
-	}
-
 }
