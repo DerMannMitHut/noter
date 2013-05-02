@@ -1,7 +1,6 @@
 package de.dom.noter.framework;
 
 import junit.framework.TestCase;
-import de.dom.noter.framework.Timer;
 import de.dom.noter.framework.Timer.TimerListener;
 
 public class TimerTest extends TestCase {
@@ -11,6 +10,19 @@ public class TimerTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		timer = new Timer();
+	}
+
+	public void testTimeNotRunning() throws Exception {
+		try {
+			timer.fireTimer( 100, new TimerListener() {
+				@Override
+				public void onTimerFired() {
+				}
+			} );
+			fail();
+		}
+		catch( final IllegalStateException expected ) {
+		}
 	}
 
 	public void testStartAndStop() throws Exception {
@@ -40,9 +52,9 @@ public class TimerTest extends TestCase {
 			}
 		};
 
-		timer.fireTimer( 100, listener1 );
-
 		timer.start();
+
+		timer.fireTimer( 100, listener1 );
 		assertEquals( 0, alerts[0] );
 		assertEquals( 0, alerts[1] );
 
