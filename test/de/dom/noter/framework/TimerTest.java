@@ -99,7 +99,11 @@ public class TimerTest extends TestCase {
 	public void testStartProblem() throws Exception {
 		timer.start();
 		Thread.sleep( 100 );
-		timer.fireTimer( 50, null );
+		timer.fireTimer( 50, new TimerListener() {
+			@Override
+			public void onTimerFired() {
+			}
+		} );
 		Thread.sleep( 10 );
 		timer.end();
 	}

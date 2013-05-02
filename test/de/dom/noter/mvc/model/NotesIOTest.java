@@ -83,7 +83,7 @@ public class NotesIOTest extends TestCase {
 		final Model model = new Model();
 		NotesIO.exportModelToWriter( w, model );
 		final Model modelFromReader = new Model();
-		NotesIO.importNotesFromReader( modelFromReader, r );
+		NotesIO.importNotesFromReader( modelFromReader, r, null );
 
 		assertEquals( model, modelFromReader );
 	}
@@ -93,7 +93,7 @@ public class NotesIOTest extends TestCase {
 		model.createNote();
 		NotesIO.exportModelToWriter( w, model );
 		final Model modelFromReader = new Model();
-		NotesIO.importNotesFromReader( modelFromReader, r );
+		NotesIO.importNotesFromReader( modelFromReader, r, NotesIO.DEFAULT_NOTES_SEPARATOR );
 
 		assertEquals( model, modelFromReader );
 	}
@@ -104,7 +104,7 @@ public class NotesIOTest extends TestCase {
 		model.createNote();
 		NotesIO.exportModelToWriter( w, model );
 		final Model modelFromReader = new Model();
-		NotesIO.importNotesFromReader( modelFromReader, r );
+		NotesIO.importNotesFromReader( modelFromReader, r, NotesIO.DEFAULT_NOTES_SEPARATOR );
 
 		assertEquals( model, modelFromReader );
 	}

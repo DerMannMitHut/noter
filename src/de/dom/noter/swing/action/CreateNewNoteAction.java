@@ -18,10 +18,9 @@ public class CreateNewNoteAction extends AbstractNoterAction {
 		this.commandControl = commandControl;
 		this.notesController = notesController;
 		this.mainWindow = mainWindow;
-		putValue( Action.NAME, "New Note" );
-		putValue( Action.SHORT_DESCRIPTION, "Creates a new note." );
-		putValue( Action.LONG_DESCRIPTION, getValue( Action.SHORT_DESCRIPTION ) );
-		putValue( Action.ACCELERATOR_KEY, getShortcutStroke( 'N' ) );
+		setName( "New Note" );
+		setDescription( "Creates a new note." );
+		setShortcut( 'N' );
 	}
 
 	@Override

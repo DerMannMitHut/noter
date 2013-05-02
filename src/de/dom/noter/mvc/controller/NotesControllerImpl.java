@@ -59,8 +59,8 @@ public class NotesControllerImpl implements NotesController {
 	}
 
 	@Override
-	public Collection<Long> importAllNotes( final File fileToRead ) {
-		final Collection<Long> ids = NotesIO.importNotesFromFile( fileToRead, model );
+	public Collection<Long> importAllNotes( final File fileToRead, final String separator ) {
+		final Collection<Long> ids = NotesIO.importNotesFromFile( fileToRead, model, separator );
 		createAndAddControllers( ids );
 		return ids;
 	}

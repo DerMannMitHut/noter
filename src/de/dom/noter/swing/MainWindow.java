@@ -21,6 +21,7 @@ import de.dom.noter.swing.action.ActionType;
 
 public class MainWindow extends JFrame implements NotesView {
 
+	private static final int DISTANCE_IN_PX = 4;
 	private static final String NORTH = SpringLayout.NORTH;
 	private static final String SOUTH = SpringLayout.SOUTH;
 	private static final String WEST = SpringLayout.WEST;
@@ -52,18 +53,18 @@ public class MainWindow extends JFrame implements NotesView {
 
 		final JButton buttonCreateNote = new JButton();
 		buttonCreateNote.setAction( getAction( ActionType.CREATE_NEW_NOTE ) );
-		layout.putConstraint( EAST, buttonCreateNote, -10, EAST, contentPane );
-		layout.putConstraint( NORTH, buttonCreateNote, 10, NORTH, contentPane );
+		layout.putConstraint( EAST, buttonCreateNote, -DISTANCE_IN_PX, EAST, contentPane );
+		layout.putConstraint( NORTH, buttonCreateNote, DISTANCE_IN_PX, NORTH, contentPane );
 		contentPane.add( buttonCreateNote );
 
 		final JScrollPane scrollPane = new JScrollPane( notesPanel );
 		scrollPane.getVerticalScrollBar().setUnitIncrement( 16 );
 		scrollPane.getHorizontalScrollBar().setUnitIncrement( 16 );
 
-		layout.putConstraint( WEST, scrollPane, 10, WEST, contentPane );
-		layout.putConstraint( NORTH, scrollPane, 5, SOUTH, buttonCreateNote );
-		layout.putConstraint( EAST, scrollPane, -10, EAST, contentPane );
-		layout.putConstraint( SOUTH, scrollPane, -10, SOUTH, contentPane );
+		layout.putConstraint( WEST, scrollPane, 0, WEST, contentPane );
+		layout.putConstraint( NORTH, scrollPane, DISTANCE_IN_PX, SOUTH, buttonCreateNote );
+		layout.putConstraint( EAST, scrollPane, 0, EAST, contentPane );
+		layout.putConstraint( SOUTH, scrollPane, 0, SOUTH, contentPane );
 		contentPane.add( scrollPane );
 
 		setMinimumSize( new Dimension( 400, 200 ) );

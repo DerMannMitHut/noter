@@ -4,7 +4,7 @@ import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
 import de.dom.noter.swing.MainWindow;
 
-final class ActionData {
+final public class ActionData {
 
 	final CommandControl commandControl;
 	final NotesController notesController;

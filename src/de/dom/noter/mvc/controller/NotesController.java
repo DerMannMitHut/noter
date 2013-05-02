@@ -11,6 +11,6 @@ public interface NotesController {
 
 	void exportAllNotes( File fileToSave );
 
-	Collection<Long> importAllNotes( File fileToRead );
+	Collection<Long> importAllNotes( File fileToRead, String separator );
 
 }

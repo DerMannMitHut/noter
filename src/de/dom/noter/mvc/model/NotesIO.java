@@ -3,16 +3,13 @@ package de.dom.noter.mvc.model;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
+import de.dom.noter.framework.FileHelper;
 
 public class NotesIO implements NotesChangedListener {
 
@@ -24,7 +21,7 @@ public class NotesIO implements NotesChangedListener {
 
 	private static final String IDS_FILENAME = "ids.list";
 	private static final String NOTE_EXTENSION = ".note";
-	private static final String NOTES_SEPARATOR = "---";
+	public static final String DEFAULT_NOTES_SEPARATOR = "---";
 
 	private final Model model;
 	private final File path;
@@ -58,17 +55,17 @@ public class NotesIO implements NotesChangedListener {
 		createModelFromNotes( noteIds );
 	}
 
-	public static Collection<Long> importNotesFromFile( final File notesFile, final Model model ) {
+	public static Collection<Long> importNotesFromFile( final File notesFile, final Model model, final String separator ) {
 		BufferedReader r = null;
 		try {
-			r = getBufferedFileReader( notesFile );
-			return importNotesFromReader( model, r );
+			r = FileHelper.getBufferedUtf8FileReader( notesFile );
+			return importNotesFromReader( model, r, separator );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( r );
+			FileHelper.closeIgnoreException( r );
 		}
 	}
 
@@ -82,14 +79,14 @@ public class NotesIO implements NotesChangedListener {
 
 		BufferedReader r = null;
 		try {
-			r = getBufferedFileReader( idsFile );
+			r = FileHelper.getBufferedUtf8FileReader( idsFile );
 			return readListOfNoteIdsFromReader( r );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( r );
+			FileHelper.closeIgnoreException( r );
 		}
 	}
 
@@ -107,14 +104,14 @@ public class NotesIO implements NotesChangedListener {
 		BufferedReader r = null;
 
 		try {
-			r = getBufferedFileReader( noteFile );
+			r = FileHelper.getBufferedUtf8FileReader( noteFile );
 			return readNoteFromReader( r );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( r );
+			FileHelper.closeIgnoreException( r );
 		}
 	}
 
@@ -129,13 +126,13 @@ public class NotesIO implements NotesChangedListener {
 	}
 
 	static Note readNoteFromReader( final BufferedReader r ) throws IOException {
-		return readNoteFromReader( null, r );
+		return readNoteFromReader( r, null );
 	}
 
-	static Collection<Long> importNotesFromReader( final Model m, final BufferedReader r ) throws IOException {
+	static Collection<Long> importNotesFromReader( final Model m, final BufferedReader r, final String separator ) throws IOException {
 		final ArrayList<Long> ids = new ArrayList<Long>();
 		while( r.ready() ) {
-			final Note note = readNoteFromReader( NOTES_SEPARATOR, r );
+			final Note note = readNoteFromReader( r, separator );
 			m.setNote( note );
 			ids.add( note.getId() );
 		}
@@ -143,7 +140,7 @@ public class NotesIO implements NotesChangedListener {
 		return Collections.unmodifiableList( ids );
 	}
 
-	static Note readNoteFromReader( final String notesSeparator, final BufferedReader r ) throws IOException {
+	static Note readNoteFromReader( final BufferedReader r, final String notesSeparator ) throws IOException {
 		Note result = new Note();
 
 		final StringBuilder content = new StringBuilder();
@@ -154,7 +151,7 @@ public class NotesIO implements NotesChangedListener {
 			final String line = r.readLine();
 			if( null == line ) {
 				nullcount += 1;
-				if( nullcount > 10 ) {
+				if( nullcount > 6 ) {
 					break;
 				}
 				else {
@@ -206,28 +203,20 @@ public class NotesIO implements NotesChangedListener {
 		return result;
 	}
 
-	private static void closeIgnoreException( final Reader r ) {
-		try {
-			r.close();
-		}
-		catch( final Exception igonre ) {
-		}
-	}
-
 	// ---------------------------------------------------------------------------- top level write methods
 
 	@Override
 	public void onNotesChanged( final Collection<Long> noteIds ) {
 		Writer w = null;
 		try {
-			w = getBufferedFileWriter( getIdsFile() );
+			w = FileHelper.getBufferedUtf8FileWriter( getIdsFile() );
 			writeListOfNoteIdsToWriter( noteIds, w );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( w );
+			FileHelper.closeIgnoreException( w );
 		}
 	}
 
@@ -235,21 +224,21 @@ public class NotesIO implements NotesChangedListener {
 	public void onNoteChanged( final Long id ) {
 		BufferedWriter w = null;
 		try {
-			w = getBufferedFileWriter( getNoteFile( id ) );
+			w = FileHelper.getBufferedUtf8FileWriter( getNoteFile( id ) );
 			writeNoteToWriter( model.getNote( id ), w );
 		}
 		catch( final IOException e ) {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( w );
+			FileHelper.closeIgnoreException( w );
 		}
 	}
 
 	public static void exportModel( final File notesFile, final Model model ) {
 		BufferedWriter w = null;
 		try {
-			w = getBufferedFileWriter( notesFile );
+			w = FileHelper.getBufferedUtf8FileWriter( notesFile );
 
 			exportModelToWriter( w, model );
 		}
@@ -257,7 +246,7 @@ public class NotesIO implements NotesChangedListener {
 			throw new RuntimeException( e );
 		}
 		finally {
-			closeIgnoreException( w );
+			FileHelper.closeIgnoreException( w );
 		}
 	}
 
@@ -285,19 +274,11 @@ public class NotesIO implements NotesChangedListener {
 		String sep = "";
 		for( final long id : m.getNoteIds() ) {
 			w.append( sep );
-			sep = NOTES_SEPARATOR + NL;
+			sep = DEFAULT_NOTES_SEPARATOR + NL;
 
 			final Note note = m.getNote( id );
 
 			writeNoteToWriter( note, w );
-		}
-	}
-
-	private static void closeIgnoreException( final Writer w ) {
-		try {
-			w.close();
-		}
-		catch( final Exception igonre ) {
 		}
 	}
 
@@ -317,14 +298,6 @@ public class NotesIO implements NotesChangedListener {
 		}
 		catch( final InterruptedException ignore ) {
 		}
-	}
-
-	private static BufferedWriter getBufferedFileWriter( final File file ) throws IOException {
-		return new BufferedWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
-	}
-
-	private static BufferedReader getBufferedFileReader( final File file ) throws IOException {
-		return new BufferedReader( new InputStreamReader( new FileInputStream( file ), "UTF-8" ) );
 	}
 
 }

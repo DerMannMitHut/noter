@@ -16,9 +16,6 @@ import de.dom.noter.swing.MainWindow;
 
 public class ExportToFileAction extends AbstractNoterAction {
 
-	private static final String ACTION_NAME = "Export notes…";
-	private static final String ACTION_DESCRIPTION = "Create a human readable file, wich contains all notes.";
-
 	private final CommandControl commandControl;
 	private final NotesController notesController;
 	private final MainWindow mainWindow;
@@ -27,14 +24,13 @@ public class ExportToFileAction extends AbstractNoterAction {
 		this.commandControl = commandControl;
 		this.notesController = notesController;
 		this.mainWindow = mainWindow;
-		putValue( Action.NAME, ACTION_NAME );
-		putValue( Action.SHORT_DESCRIPTION, ACTION_DESCRIPTION );
-		putValue( Action.LONG_DESCRIPTION, ACTION_DESCRIPTION );
+		setName( "Export notes…" );
+		setDescription( "Create a human readable file, wich contains all notes." );
 	}
 
 	@Override
 	public void actionPerformed( final ActionEvent e ) {
-		final FileChooser chooser = new FileChooser( mainWindow, ACTION_NAME, Mode.SAVE_FILE );
+		final FileChooser chooser = new FileChooser( mainWindow, getName(), Mode.SAVE_FILE );
 		chooser.setFilename( "notes.txt" );
 		chooser.setFilenameFilter( new FilenameFilter() {
 			@Override
