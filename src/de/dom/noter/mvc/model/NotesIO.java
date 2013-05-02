@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import de.dom.noter.framework.FileHelper;
+import de.dom.noter.framework.Persistence;
 
 public class NotesIO implements NotesChangedListener {
 
@@ -24,28 +25,11 @@ public class NotesIO implements NotesChangedListener {
 	public static final String DEFAULT_NOTES_SEPARATOR = "---";
 
 	private final Model model;
-	private final File path;
+	private final Persistence persistence;
 
-	public NotesIO(final Model model, final File path) {
+	public NotesIO(final Model model, final Persistence p) {
 		this.model = model;
-		this.path = path;
-		ensureFolder( path );
-	}
-
-	private void ensureFolder( final File folder ) {
-		if( folder.exists() ) {
-			if( !folder.isDirectory() ) {
-				throw new IllegalArgumentException( "Given path " + folder.getAbsolutePath() + " is not a directory." );
-			}
-			if( !folder.canWrite() ) {
-				throw new IllegalArgumentException( "Can't write into directory " + folder.getAbsolutePath() );
-			}
-		}
-		else {
-			if( folder.mkdirs() == false ) {
-				throw new IllegalArgumentException( "Can't create directory " + folder.getAbsolutePath() );
-			}
-		}
+		persistence = p;
 	}
 
 	// ---------------------------------------------------------------------------- top level read methods
@@ -132,7 +116,10 @@ public class NotesIO implements NotesChangedListener {
 	static Collection<Long> importNotesFromReader( final Model m, final BufferedReader r, final String separator ) throws IOException {
 		final ArrayList<Long> ids = new ArrayList<Long>();
 		while( r.ready() ) {
-			final Note note = readNoteFromReader( r, separator );
+			Note note = readNoteFromReader( r, separator );
+			if( m.hasNote( note.getId() ) ) {
+				note = note.createNewId();
+			}
 			m.setNote( note );
 			ids.add( note.getId() );
 		}
@@ -159,7 +146,7 @@ public class NotesIO implements NotesChangedListener {
 					continue;
 				}
 			}
-			else if( line.equalsIgnoreCase( notesSeparator ) ) {
+			else if( line.trim().equalsIgnoreCase( notesSeparator ) ) {
 				break;
 			}
 			else if( !result.hasTitle() && line.startsWith( PRE_ID ) && line.endsWith( POST_ID ) ) {
@@ -285,11 +272,11 @@ public class NotesIO implements NotesChangedListener {
 	// ---------------------------------------------------------------------------- Helper methods
 
 	private File getIdsFile() {
-		return new File( path, IDS_FILENAME );
+		return persistence.getDataFile( IDS_FILENAME );
 	}
 
 	private File getNoteFile( final long id ) {
-		return new File( path, Long.toHexString( id ) + NOTE_EXTENSION );
+		return persistence.getDataFile( Long.toHexString( id ) + NOTE_EXTENSION );
 	}
 
 	private static void sleepAWhile( final int timeToSleep ) {

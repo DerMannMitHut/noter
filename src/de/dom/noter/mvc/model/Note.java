@@ -110,4 +110,8 @@ public class Note extends Data {
 		}
 	}
 
+	public Note createNewId() {
+		return new Note( getNextId(), this );
+	}
+
 }

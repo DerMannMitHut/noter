@@ -109,6 +109,21 @@ public class NotesIOTest extends TestCase {
 		assertEquals( model, modelFromReader );
 	}
 
+	public void testModelReadDouble() throws Exception {
+		final Model model = new Model();
+		model.createNote();
+		model.createNote();
+		final Model modelFromReader = new Model();
+
+		NotesIO.exportModelToWriter( w, model );
+		NotesIO.importNotesFromReader( modelFromReader, r, NotesIO.DEFAULT_NOTES_SEPARATOR );
+
+		NotesIO.exportModelToWriter( w, model );
+		NotesIO.importNotesFromReader( modelFromReader, r, NotesIO.DEFAULT_NOTES_SEPARATOR );
+
+		assertEquals( model.size() * 2, modelFromReader.size() );
+	}
+
 	public void testNoteFormatFull() throws Exception {
 		final String txt = idString + NL + titleString + NL + contentString;
 		final Note note = NotesIO.readNoteFromReader( new BufferedReader( new StringReader( txt ) ) );

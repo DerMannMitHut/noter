@@ -9,7 +9,7 @@ public class Data {
 	private final long id;
 
 	protected Data() {
-		this( RNG.nextLong() );
+		this( getNextId() );
 	}
 
 	protected Data(final Data orig) {
@@ -52,6 +52,10 @@ public class Data {
 			return false;
 		}
 		return true;
+	}
+
+	protected static long getNextId() {
+		return RNG.nextLong();
 	}
 
 }

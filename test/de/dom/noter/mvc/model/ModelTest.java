@@ -103,4 +103,26 @@ public class ModelTest extends TestCase {
 		assertTrue( m.equals( new Model() ) );
 		assertFalse( m.equals( m2 ) );
 	}
+
+	public void testSize() throws Exception {
+		final Model m = new Model();
+
+		assertEquals( 0, m.size() );
+
+		final Note n = m.createNote();
+
+		assertEquals( 1, m.size() );
+
+		m.changeNote( n.setTitle( "bla" ) );
+
+		assertEquals( 1, m.size() );
+
+		m.createNote();
+
+		assertEquals( 2, m.size() );
+
+		m.clear();
+
+		assertEquals( 0, m.size() );
+	}
 }

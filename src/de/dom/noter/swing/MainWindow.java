@@ -2,6 +2,8 @@ package de.dom.noter.swing;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Collection;
 import java.util.Map;
 
@@ -11,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
+import de.dom.noter.framework.Persistence;
+import de.dom.noter.main.Noter;
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
 import de.dom.noter.mvc.controller.command.UndoableCommand;
@@ -68,9 +72,37 @@ public class MainWindow extends JFrame implements NotesView {
 		contentPane.add( scrollPane );
 
 		setMinimumSize( new Dimension( 400, 200 ) );
-		setPreferredSize( new Dimension( 1024, 768 ) );
+
+		final Persistence pers = Noter.getPersistence();
+		final int x = pers.getUserPrefAsInt( this.getClass(), "x", 0 );
+		final int y = pers.getUserPrefAsInt( this.getClass(), "y", 0 );
+		final int w = pers.getUserPrefAsInt( this.getClass(), "w", 1024 );
+		final int h = pers.getUserPrefAsInt( this.getClass(), "h", 768 );
+		setPreferredSize( new Dimension( w, h ) );
 
 		pack();
+
+		addComponentListener( new ComponentAdapter() {
+			@Override
+			public void componentResized( final ComponentEvent e ) {
+				storeWindowBounds();
+			}
+
+			@Override
+			public void componentMoved( final ComponentEvent e ) {
+				storeWindowBounds();
+			}
+
+			private void storeWindowBounds() {
+				pers.setUserPref( this.getClass(), "x", getX() );
+				pers.setUserPref( this.getClass(), "y", getY() );
+				pers.setUserPref( this.getClass(), "w", getWidth() );
+				pers.setUserPref( this.getClass(), "h", getHeight() );
+			}
+
+		} );
+
+		setBounds( x, y, w, h );
 	}
 
 	public Action getAction( final ActionType actionType ) {

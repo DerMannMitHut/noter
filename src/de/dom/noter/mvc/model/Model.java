@@ -176,4 +176,8 @@ public class Model {
 	public String toString() {
 		return notes.keySet().toString();
 	}
+
+	public int size() {
+		return notes.size();
+	}
 }
