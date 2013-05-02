@@ -3,9 +3,11 @@ package de.dom.noter.mvc.model;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class NotesIO implements NotesChangedListener {
 	public static Collection<Long> importNotesFromFile( final File notesFile, final Model model ) {
 		BufferedReader r = null;
 		try {
-			r = new BufferedReader( new FileReader( notesFile ) );
+			r = getBufferedFileReader( notesFile );
 			return importNotesFromReader( model, r );
 		}
 		catch( final IOException e ) {
@@ -80,7 +82,7 @@ public class NotesIO implements NotesChangedListener {
 
 		BufferedReader r = null;
 		try {
-			r = new BufferedReader( new FileReader( idsFile ) );
+			r = getBufferedFileReader( idsFile );
 			return readListOfNoteIdsFromReader( r );
 		}
 		catch( final IOException e ) {
@@ -105,7 +107,7 @@ public class NotesIO implements NotesChangedListener {
 		BufferedReader r = null;
 
 		try {
-			r = new BufferedReader( new FileReader( noteFile ) );
+			r = getBufferedFileReader( noteFile );
 			return readNoteFromReader( r );
 		}
 		catch( final IOException e ) {
@@ -218,7 +220,7 @@ public class NotesIO implements NotesChangedListener {
 	public void onNotesChanged( final Collection<Long> noteIds ) {
 		Writer w = null;
 		try {
-			w = new BufferedWriter( new FileWriter( getIdsFile() ) );
+			w = getBufferedFileWriter( getIdsFile() );
 			writeListOfNoteIdsToWriter( noteIds, w );
 		}
 		catch( final IOException e ) {
@@ -233,7 +235,7 @@ public class NotesIO implements NotesChangedListener {
 	public void onNoteChanged( final Long id ) {
 		BufferedWriter w = null;
 		try {
-			w = new BufferedWriter( new FileWriter( getNoteFile( id ) ) );
+			w = getBufferedFileWriter( getNoteFile( id ) );
 			writeNoteToWriter( model.getNote( id ), w );
 		}
 		catch( final IOException e ) {
@@ -247,7 +249,7 @@ public class NotesIO implements NotesChangedListener {
 	public static void exportModel( final File notesFile, final Model model ) {
 		BufferedWriter w = null;
 		try {
-			w = new BufferedWriter( new FileWriter( notesFile ) );
+			w = getBufferedFileWriter( notesFile );
 
 			exportModelToWriter( w, model );
 		}
@@ -315,6 +317,14 @@ public class NotesIO implements NotesChangedListener {
 		}
 		catch( final InterruptedException ignore ) {
 		}
+	}
+
+	private static BufferedWriter getBufferedFileWriter( final File file ) throws IOException {
+		return new BufferedWriter( new OutputStreamWriter( new FileOutputStream( file ), "UTF-8" ) );
+	}
+
+	private static BufferedReader getBufferedFileReader( final File file ) throws IOException {
+		return new BufferedReader( new InputStreamReader( new FileInputStream( file ), "UTF-8" ) );
 	}
 
 }
