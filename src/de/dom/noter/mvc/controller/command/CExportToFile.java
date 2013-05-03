@@ -4,18 +4,18 @@ import java.io.File;
 
 import de.dom.noter.mvc.controller.NotesController;
 
-public class ExportToFileCommand implements Command {
+public class CExportToFile extends Command {
 
 	private final NotesController notesController;
 	private final File fileToSave;
 
-	public ExportToFileCommand(final NotesController notesController, final File fileToSave) {
+	public CExportToFile(final NotesController notesController, final File fileToSave) {
 		this.notesController = notesController;
 		this.fileToSave = fileToSave;
 	}
 
 	@Override
-	public void redo() {
+	public void performInternal() {
 		notesController.exportAllNotes( fileToSave );
 	}
 }

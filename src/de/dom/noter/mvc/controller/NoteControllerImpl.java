@@ -19,6 +19,7 @@ public class NoteControllerImpl implements NoteController {
 		model.addNoteChangedListener( view, noteId );
 	}
 
+	@Override
 	public Note getNote() {
 		return model.getNote( noteId );
 	}
@@ -28,17 +29,17 @@ public class NoteControllerImpl implements NoteController {
 	}
 
 	@Override
-	public String setTitle( final String newTitle ) {
+	public Note setTitle( final String newTitle ) {
 		final Note oldNote = getNote();
 		model.changeNote( oldNote.setTitle( newTitle ) );
-		return oldNote.getTitle();
+		return oldNote;
 	}
 
 	@Override
-	public String setContent( final String newContent ) {
+	public Note setContent( final String newContent ) {
 		final Note oldNote = getNote();
 		model.changeNote( oldNote.setContent( newContent ) );
-		return oldNote.getContent();
+		return oldNote;
 	}
 
 	@Override

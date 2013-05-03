@@ -1,11 +1,13 @@
 package de.dom.noter.mvc.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.dom.noter.mvc.model.Model;
+import de.dom.noter.mvc.model.Note;
 import de.dom.noter.mvc.model.NotesIO;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.mvc.view.NotesView;
@@ -27,10 +29,10 @@ public class NotesControllerImpl implements NotesController {
 	}
 
 	@Override
-	public long createNewNote() {
-		final long id = model.createNote().getId();
-		createAndAddNoteController( id );
-		return id;
+	public Note createNewNote() {
+		final Note newNote = model.createNote();
+		createAndAddNoteController( newNote.getId() );
+		return newNote;
 	}
 
 	private void createAndAddNoteController( final long id ) {
@@ -59,10 +61,16 @@ public class NotesControllerImpl implements NotesController {
 	}
 
 	@Override
-	public Collection<Long> importAllNotes( final File fileToRead, final String separator ) {
+	public Collection<Note> importAllNotes( final File fileToRead, final String separator ) {
 		final Collection<Long> ids = NotesIO.importNotesFromFile( fileToRead, model, separator );
 		createAndAddControllers( ids );
-		return ids;
+
+		final ArrayList<Note> notes = new ArrayList<Note>();
+		for( final long id : ids ) {
+			notes.add( model.getNote( id ) );
+		}
+
+		return notes;
 	}
 
 	private void createAndAddControllers( final Collection<Long> ids ) {

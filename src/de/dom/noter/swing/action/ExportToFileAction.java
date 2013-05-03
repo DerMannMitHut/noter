@@ -8,7 +8,7 @@ import javax.swing.Action;
 
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
-import de.dom.noter.mvc.controller.command.ExportToFileCommand;
+import de.dom.noter.mvc.controller.command.CExportToFile;
 import de.dom.noter.swing.FileChooser;
 import de.dom.noter.swing.FileChooser.FileSelectionHandler;
 import de.dom.noter.swing.FileChooser.Mode;
@@ -41,7 +41,7 @@ public class ExportToFileAction extends AbstractNoterAction {
 		chooser.openDialog( new FileSelectionHandler() {
 			@Override
 			public void onFileSelected( final File file ) {
-				commandControl.doCommand( new ExportToFileCommand( notesController, file ) );
+				commandControl.doCommand( new CExportToFile( notesController, file ) );
 			}
 		} );
 	}

@@ -3,14 +3,16 @@ package de.dom.noter.mvc.controller;
 import java.io.File;
 import java.util.Collection;
 
+import de.dom.noter.mvc.model.Note;
+
 public interface NotesController {
 
-	long createNewNote();
+	Note createNewNote();
 
 	void removeNote( long noteId );
 
 	void exportAllNotes( File fileToSave );
 
-	Collection<Long> importAllNotes( File fileToRead, String separator );
+	Collection<Note> importAllNotes( File fileToRead, String separator );
 
 }

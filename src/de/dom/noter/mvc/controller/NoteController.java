@@ -4,10 +4,12 @@ import de.dom.noter.mvc.model.Note;
 
 public interface NoteController {
 
-	String setTitle( String title );
+	Note setTitle( String title );
 
-	String setContent( String content );
+	Note setContent( String content );
 
 	Note removeNote();
+
+	Note getNote();
 
 }

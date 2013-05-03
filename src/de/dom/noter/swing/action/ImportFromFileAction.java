@@ -18,7 +18,7 @@ import javax.swing.SpringLayout;
 import de.dom.noter.framework.FileHelper;
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
-import de.dom.noter.mvc.controller.command.ImportFromFileCommand;
+import de.dom.noter.mvc.controller.command.UCImportFromFile;
 import de.dom.noter.swing.FileChooser;
 import de.dom.noter.swing.FileChooser.FileSelectionHandler;
 import de.dom.noter.swing.FileChooser.Mode;
@@ -175,7 +175,7 @@ public class ImportFromFileAction extends AbstractNoterAction {
 				@Override
 				public void actionPerformed( final ActionEvent e ) {
 					ImportDialog.this.setVisible( false );
-					commandControl.doCommand( new ImportFromFileCommand( notesController, selectedFile, separatorLine.getText() ) );
+					commandControl.doCommand( new UCImportFromFile( notesController, selectedFile, separatorLine.getText() ) );
 				}
 
 			} );

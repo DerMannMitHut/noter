@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 import de.dom.noter.framework.Timer;
 import de.dom.noter.framework.Timer.TimerListener;
 import de.dom.noter.mvc.controller.NoteController;
-import de.dom.noter.mvc.controller.command.SetContentCommand;
-import de.dom.noter.mvc.controller.command.SetTitleCommand;
+import de.dom.noter.mvc.controller.command.UCSetContent;
+import de.dom.noter.mvc.controller.command.UCSetTitle;
 import de.dom.noter.mvc.model.Note;
 import de.dom.noter.mvc.view.NoteView;
 import de.dom.noter.swing.action.AbstractNoterAction;
@@ -37,7 +37,7 @@ public class NotePanel extends JPanel implements NoteView {
 	final TimerListener doSetTitleAction = new TimerListener() {
 		@Override
 		public void onTimerFired() {
-			mainWindow.doCommand( new SetTitleCommand( noteController, labelTitle.getText() ) );
+			mainWindow.doCommand( new UCSetTitle( noteController, labelTitle.getText() ) );
 		}
 	};
 
@@ -45,7 +45,7 @@ public class NotePanel extends JPanel implements NoteView {
 	final TimerListener doSetContentAction = new TimerListener() {
 		@Override
 		public void onTimerFired() {
-			mainWindow.doCommand( new SetContentCommand( noteController, areaContent.getText() ) );
+			mainWindow.doCommand( new UCSetContent( noteController, areaContent.getText() ) );
 		}
 	};
 

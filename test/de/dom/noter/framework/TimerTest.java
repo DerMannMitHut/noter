@@ -54,11 +54,13 @@ public class TimerTest extends TestCase {
 
 		timer.start();
 
+		Thread.sleep( 5 ); // listener1: 5
+
 		timer.fireTimer( 100, listener1 );
 		assertEquals( 0, alerts[0] );
 		assertEquals( 0, alerts[1] );
 
-		Thread.sleep( 55 ); // listener1: 55
+		Thread.sleep( 50 ); // listener1: 55
 		assertEquals( 0, alerts[0] );
 		assertEquals( 0, alerts[1] );
 

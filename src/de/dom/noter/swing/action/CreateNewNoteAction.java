@@ -6,7 +6,7 @@ import javax.swing.Action;
 
 import de.dom.noter.mvc.controller.NotesController;
 import de.dom.noter.mvc.controller.command.CommandControl;
-import de.dom.noter.mvc.controller.command.CreateNewNoteCommand;
+import de.dom.noter.mvc.controller.command.UCCreateNewNote;
 import de.dom.noter.swing.MainWindow;
 
 public class CreateNewNoteAction extends AbstractNoterAction {
@@ -25,7 +25,7 @@ public class CreateNewNoteAction extends AbstractNoterAction {
 
 	@Override
 	public void actionPerformed( final ActionEvent e ) {
-		commandControl.doCommand( new CreateNewNoteCommand( notesController ) );
+		commandControl.doCommand( new UCCreateNewNote( notesController ) );
 		mainWindow.selectFirstTitle();
 	}
 
