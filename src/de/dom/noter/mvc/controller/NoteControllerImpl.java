@@ -31,14 +31,14 @@ public class NoteControllerImpl implements NoteController {
 	@Override
 	public Note setTitle( final String newTitle ) {
 		final Note oldNote = getNote();
-		model.changeNote( oldNote.setTitle( newTitle ) );
+		model.setNote( oldNote.setTitle( newTitle ) );
 		return oldNote;
 	}
 
 	@Override
 	public Note setContent( final String newContent ) {
 		final Note oldNote = getNote();
-		model.changeNote( oldNote.setContent( newContent ) );
+		model.setNote( oldNote.setContent( newContent ) );
 		return oldNote;
 	}
 

@@ -69,4 +69,43 @@ public class UndoStackCapacityTest extends TestCase {
 		}
 	}
 
+	public void _testUndoOverflow() throws Exception {
+		final UndoStack<Object> usUnlimited = new UndoStack<Object>();
+
+		final long time1 = System.currentTimeMillis();
+		final int countUnlimited = countUntilFailed( usUnlimited, Integer.MAX_VALUE );
+		final long time2 = System.currentTimeMillis();
+		System.out.println( "countUnlimited=" + countUnlimited + "; " + (time2 - time1) );
+
+		final long time3 = System.currentTimeMillis();
+		final int countUs = countUntilFailed( us, countUnlimited << 1 );
+		final long time4 = System.currentTimeMillis();
+		System.out.println( "countUs=" + countUs + "; " + (time4 - time3) );
+
+		assertTrue( countUnlimited < countUs );
+
+	}
+
+	private int countUntilFailed( final UndoStack<Object> stack, final long failNumber ) throws InterruptedException {
+		final Object e = new Object();
+		int count = 0;
+
+		try {
+			while( true ) {
+				stack.add( e );
+				count += 1;
+				if( count > failNumber ) {
+					break;
+				}
+			}
+		}
+		catch( final Throwable t ) {
+			stack.clear();
+			Runtime.getRuntime().gc();
+			t.printStackTrace();
+		}
+
+		return count;
+	}
+
 }

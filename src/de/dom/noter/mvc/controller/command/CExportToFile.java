@@ -15,7 +15,8 @@ public class CExportToFile extends Command {
 	}
 
 	@Override
-	public void performInternal() {
+	public boolean performInternal() {
 		notesController.exportAllNotes( fileToSave );
+		return true;
 	}
 }

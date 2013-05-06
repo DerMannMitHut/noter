@@ -8,7 +8,14 @@ import javax.swing.Action;
 
 public enum ActionType {
 
-	CREATE_NEW_NOTE(CreateNewNoteAction.class), EXPORT_TO_FILE(ExportToFileAction.class), IMPORT_FROM_FILE(ImportFromFileAction.class);
+	// notes
+	CREATE_NEW_NOTE(CreateNewNoteAction.class),
+
+	// file
+	EXPORT_TO_FILE(ExportToFileAction.class), IMPORT_FROM_FILE(ImportFromFileAction.class),
+
+	// edit
+	UNDO(UndoAction.class), REDO(RedoAction.class);
 
 	private final Class<?> actionClass;
 

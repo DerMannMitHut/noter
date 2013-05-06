@@ -40,7 +40,7 @@ public class ImportFromFileAction extends AbstractNoterAction {
 		this.commandControl = commandControl;
 		this.notesController = notesController;
 		this.mainWindow = mainWindow;
-		setName( "Import notesÉ" );
+		setName( "Import notesâ€¦" );
 		setDescription( "Reads notes from a text file." );
 	}
 
@@ -215,7 +215,7 @@ public class ImportFromFileAction extends AbstractNoterAction {
 		private JButton configureChooseFile( final Container contentPane ) {
 			final JButton chooseFile = new JButton( new AbstractNoterAction() {
 				{
-					setName( "Choose fileÉ" );
+					setName( "Choose fileï¿½" );
 					setDescription( "Choose text file for import." );
 				}
 

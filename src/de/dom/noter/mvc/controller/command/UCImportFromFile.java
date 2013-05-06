@@ -1,8 +1,10 @@
 package de.dom.noter.mvc.controller.command;
 
 import java.io.File;
+import java.util.Collection;
 
 import de.dom.noter.mvc.controller.NotesController;
+import de.dom.noter.mvc.model.Note;
 
 public class UCImportFromFile extends UndoableCommand {
 
@@ -17,8 +19,10 @@ public class UCImportFromFile extends UndoableCommand {
 	}
 
 	@Override
-	public void performInternal() {
-		setRedoNotes( notesController.importAllNotes( fileToRead, separator ) );
+	public boolean performInternal() {
+		final Collection<Note> notes = notesController.importAllNotes( fileToRead, separator );
+		setRedoNotes( notes );
+		return notes.size() > 0;
 	}
 
 }

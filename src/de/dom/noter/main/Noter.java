@@ -12,7 +12,33 @@ import de.dom.noter.swing.MainWindow;
 
 public class Noter {
 
+	public enum OsType {
+		WIN, MACOS, LINUX, OTHER;
+	}
+
 	private static final Persistence PERSISTENCE = new Persistence();
+	private static final OsType OS;
+
+	static {
+		final String os = System.getProperty( "os.name" ).toLowerCase();
+		if( os.contains( "win" ) ) {
+			OS = OsType.WIN;
+		}
+		else if( os.contains( "mac" ) ) {
+			OS = OsType.MACOS;
+		}
+		else if( os.contains( "linux" ) ) {
+			OS = OsType.LINUX;
+		}
+		else {
+			OS = OsType.OTHER;
+		}
+		System.out.println( "Detected OS: " + getOs() );
+	}
+
+	public static OsType getOs() {
+		return OS;
+	}
 
 	public static String getApplicationQualifiedName() {
 		return Noter.class.getName();
@@ -25,14 +51,14 @@ public class Noter {
 	public static void main( final String[] args ) throws Exception {
 		initGuiLookAndFeel();
 
-		final CommandControl cc = new CommandControl();
-		final MainWindow mw = new MainWindow( cc );
-
 		final Model m = new Model();
 		final NotesIO io = new NotesIO( m, getPersistence() );
 		io.readModelFromFiles();
 
 		m.addNotesChangedListener( io );
+
+		final CommandControl cc = new CommandControl( m );
+		final MainWindow mw = new MainWindow( cc );
 
 		final NotesController nc = new NotesControllerImpl( m, mw );
 		mw.setController( nc );

@@ -7,8 +7,8 @@ import java.io.FilenameFilter;
 import javax.swing.Action;
 
 import de.dom.noter.mvc.controller.NotesController;
-import de.dom.noter.mvc.controller.command.CommandControl;
 import de.dom.noter.mvc.controller.command.CExportToFile;
+import de.dom.noter.mvc.controller.command.CommandControl;
 import de.dom.noter.swing.FileChooser;
 import de.dom.noter.swing.FileChooser.FileSelectionHandler;
 import de.dom.noter.swing.FileChooser.Mode;
@@ -24,7 +24,7 @@ public class ExportToFileAction extends AbstractNoterAction {
 		this.commandControl = commandControl;
 		this.notesController = notesController;
 		this.mainWindow = mainWindow;
-		setName( "Export notes…" );
+		setName( "Export notes‚Ä¶" );
 		setDescription( "Create a human readable file, wich contains all notes." );
 	}
 

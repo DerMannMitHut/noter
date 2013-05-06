@@ -110,7 +110,7 @@ public class NotePanel extends JPanel implements NoteView {
 
 		final AbstractNoterAction removeAction = new AbstractNoterAction() {
 			{
-				putValue( Action.NAME, "Ð" );
+				putValue( Action.NAME, "â€“" );
 			}
 
 			@Override
@@ -129,12 +129,7 @@ public class NotePanel extends JPanel implements NoteView {
 
 			@Override
 			public void keyTyped( final KeyEvent arg0 ) {
-				timer.fireTimer( TYPING_PAUSE, new TimerListener() {
-					@Override
-					public void onTimerFired() {
-						noteController.setContent( areaContent.getText() );
-					}
-				} );
+				timer.fireTimer( TYPING_PAUSE, doSetContentAction );
 			}
 
 			@Override
@@ -143,6 +138,18 @@ public class NotePanel extends JPanel implements NoteView {
 
 			@Override
 			public void keyPressed( final KeyEvent arg0 ) {
+			}
+		} );
+
+		areaContent.addFocusListener( new FocusListener() {
+
+			@Override
+			public void focusLost( final FocusEvent e ) {
+				timer.fireTimer( 0, doSetContentAction );
+			}
+
+			@Override
+			public void focusGained( final FocusEvent e ) {
 			}
 		} );
 

@@ -13,7 +13,10 @@ public class UCCreateNewNote extends UndoableCommand {
 	}
 
 	@Override
-	public void performInternal() {
+	public boolean performInternal() {
 		setRedoNotes( Collections.singleton( notesController.createNewNote() ) );
+		setText( "New Note" );
+		return true;
 	}
+
 }

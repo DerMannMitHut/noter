@@ -15,6 +15,7 @@ public class MainMenu extends JMenuBar {
 	public MainMenu(final MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		createAndAddFileMenu();
+		createAndAddEditMenu();
 		createAndAddNotesMenu();
 	}
 
@@ -24,6 +25,14 @@ public class MainMenu extends JMenuBar {
 
 		menu.add( new JMenuItem( mainWindow.getAction( ActionType.IMPORT_FROM_FILE ) ) );
 		menu.add( new JMenuItem( mainWindow.getAction( ActionType.EXPORT_TO_FILE ) ) );
+	}
+
+	private void createAndAddEditMenu() {
+		final JMenu menu = new JMenu( "Edit" );
+		add( menu );
+
+		menu.add( new JMenuItem( mainWindow.getAction( ActionType.UNDO ) ) );
+		menu.add( new JMenuItem( mainWindow.getAction( ActionType.REDO ) ) );
 	}
 
 	private void createAndAddNotesMenu() {

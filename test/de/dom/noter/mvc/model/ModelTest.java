@@ -1,7 +1,5 @@
 package de.dom.noter.mvc.model;
 
-import java.util.NoSuchElementException;
-
 import junit.framework.TestCase;
 import de.dom.noter.mvc.view.SimpleMock;
 
@@ -19,21 +17,16 @@ public class ModelTest extends TestCase {
 		final Note n = m.createNote();
 
 		final Note n1 = n.setTitle( "bla1" );
-		m.changeNote( n1 );
+		m.setNote( n1 );
 		assertEquals( n1, m.getNote( n.getId() ) );
 
-		try {
-			m.changeNote( new Note() );
-			fail();
-		}
-		catch( final NoSuchElementException expected ) {
-		}
+		assertNull( m.setNote( new Note() ) );
 
 		try {
 			m.getNote( 42 );
 			fail();
 		}
-		catch( final NoSuchElementException expected ) {
+		catch( final IllegalArgumentException expected ) {
 		}
 	}
 
@@ -51,7 +44,7 @@ public class ModelTest extends TestCase {
 		assertEquals( 2, SimpleMock.getCalls( l0, "onNoteChanged" ) );
 		assertEquals( 1, SimpleMock.getCalls( l1, "onNoteChanged" ) );
 
-		m.changeNote( n.setTitle( "bla" ) );
+		m.setNote( n.setTitle( "bla" ) );
 
 		assertEquals( 3, SimpleMock.getCalls( l0, "onNoteChanged" ) );
 		assertEquals( 2, SimpleMock.getCalls( l1, "onNoteChanged" ) );
@@ -113,7 +106,7 @@ public class ModelTest extends TestCase {
 
 		assertEquals( 1, m.size() );
 
-		m.changeNote( n.setTitle( "bla" ) );
+		m.setNote( n.setTitle( "bla" ) );
 
 		assertEquals( 1, m.size() );
 

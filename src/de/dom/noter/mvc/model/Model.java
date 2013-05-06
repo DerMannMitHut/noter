@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import de.dom.noter.framework.IdentityHashSet;
 import de.dom.noter.mvc.view.NoteView;
@@ -25,13 +24,19 @@ public class Model {
 	}
 
 	public Note getNote( final long noteId ) {
-		checkNote( noteId );
+		checkNoteExists( noteId );
 		return notes.get( noteId );
 	}
 
-	private void checkNote( final long noteId ) {
+	private void checkNoteExists( final long noteId ) {
 		if( !hasNote( noteId ) ) {
-			throw new NoSuchElementException( "noteId=" + noteId );
+			throw new IllegalArgumentException( "noteId=" + noteId + " does not exist." );
+		}
+	}
+
+	private void checkNoteNotExists( final long noteId ) {
+		if( hasNote( noteId ) ) {
+			throw new IllegalArgumentException( "noteId=" + noteId + " already exists." );
 		}
 	}
 
@@ -39,12 +44,7 @@ public class Model {
 		return notes.containsKey( noteId );
 	}
 
-	public void changeNote( final Note changedNote ) {
-		checkNote( changedNote.getId() );
-		setNote( changedNote );
-	}
-
-	Note setNote( final Note newNote ) {
+	public Note setNote( final Note newNote ) {
 		if( null == newNote ) {
 			return null;
 		}
@@ -126,7 +126,7 @@ public class Model {
 	}
 
 	public Note removeNote( final long id ) {
-		checkNote( id );
+		checkNoteExists( id );
 		final Note oldNote = notes.remove( id );
 		notifyNotesChangedListeners();
 		return oldNote;

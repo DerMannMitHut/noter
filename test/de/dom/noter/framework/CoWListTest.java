@@ -12,7 +12,7 @@ public class CoWListTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		cl = CoWList.empty();
+		cl = CoWListImpl.empty();
 		e1 = new Object();
 		e2 = new Object();
 	}
@@ -45,8 +45,8 @@ public class CoWListTest extends TestCase {
 		final CoWList<Object> hl1 = cl.headList( 1 );
 		final CoWList<Object> hl2 = cl.headList( 2 );
 
-		assertEquals( CoWList.empty(), hl0 );
-		assertEquals( CoWList.empty().add( e2 ), hl1 );
+		assertEquals( CoWListImpl.empty(), hl0 );
+		assertEquals( CoWListImpl.empty().add( e2 ), hl1 );
 		assertEquals( cl, hl2 );
 
 		try {

@@ -74,7 +74,53 @@ public class UndoStackTest extends TestCase {
 		}
 		catch( final NoSuchElementException expected ) {
 		}
+	}
 
+	public void testPeekUndo() throws Exception {
+		us.add( e1 );
+		us.add( e2 );
+
+		assertEquals( e2, us.peekNextUndoElement() );
+		assertEquals( e2, us.peekNextUndoElement() );
+
+		us.getNextUndoElement();
+
+		assertEquals( e1, us.peekNextUndoElement() );
+		assertEquals( e1, us.peekNextUndoElement() );
+
+		us.getNextUndoElement();
+
+		try {
+			us.peekNextUndoElement();
+			fail();
+		}
+		catch( final NoSuchElementException expected ) {
+		}
+	}
+
+	public void testPeekRedo() throws Exception {
+		us.add( e1 );
+		us.add( e2 );
+
+		us.getNextUndoElement();
+		us.getNextUndoElement();
+
+		assertEquals( e1, us.peekNextRedoElement() );
+		assertEquals( e1, us.peekNextRedoElement() );
+
+		us.getNextRedoElement();
+
+		assertEquals( e2, us.peekNextRedoElement() );
+		assertEquals( e2, us.peekNextRedoElement() );
+
+		us.getNextRedoElement();
+
+		try {
+			us.peekNextRedoElement();
+			fail();
+		}
+		catch( final NoSuchElementException expected ) {
+		}
 	}
 
 }

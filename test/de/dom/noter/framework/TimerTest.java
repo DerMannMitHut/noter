@@ -70,17 +70,17 @@ public class TimerTest extends TestCase {
 		assertEquals( 1, alerts[0] );
 		assertEquals( 0, alerts[1] );
 
-		timer.fireTimer( 150, listener2 );
+		timer.fireTimer( 160, listener2 );
 
-		Thread.sleep( 55 ); // listener2: 55
+		Thread.sleep( 51 ); // listener2: 51
 		assertEquals( 1, alerts[0] );
 		assertEquals( 0, alerts[1] );
 
-		Thread.sleep( 55 ); // listener2: 110
+		Thread.sleep( 51 ); // listener2: 102
 		assertEquals( 1, alerts[0] );
 		assertEquals( 0, alerts[1] );
 
-		Thread.sleep( 55 ); // listener2: 165
+		Thread.sleep( 63 ); // listener2: 165
 		assertEquals( 1, alerts[0] );
 		assertEquals( 1, alerts[1] );
 

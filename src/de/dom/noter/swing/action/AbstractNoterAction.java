@@ -31,6 +31,22 @@ public abstract class AbstractNoterAction extends AbstractAction {
 		setShortcut( keyCode, 0 );
 	}
 
+	/**
+	 * @param keyCode
+	 *            the capital letter
+	 * @param additionalModifiers
+	 *            The modifiers consist of any combination of:
+	 *            <ul>
+	 *            <li>java.awt.event.InputEvent.SHIFT_DOWN_MASK
+	 *            <li>java.awt.event.InputEvent.CTRL_DOWN_MASK
+	 *            <li>java.awt.event.InputEvent.META_DOWN_MASK
+	 *            <li>java.awt.event.InputEvent.ALT_DOWN_MASK
+	 *            <li>java.awt.event.InputEvent.ALT_GRAPH_DOWN_MASK
+	 *            </ul>
+	 * 
+	 *            Note that CTRL and META are used as SHORTCUT modifiers on Windows and MacOS, and therefore should be avoided.
+	 * 
+	 */
 	protected void setShortcut( final char keyCode, final int additionalModifiers ) {
 		final KeyStroke shortcutStroke = KeyStroke.getKeyStroke( keyCode, SHORTCUT_MASK | additionalModifiers );
 		putValue( Action.ACCELERATOR_KEY, shortcutStroke );

@@ -3,6 +3,7 @@ package de.dom.noter.mvc.controller.command;
 import java.util.Collections;
 
 import de.dom.noter.mvc.controller.NoteController;
+import de.dom.noter.mvc.model.Note;
 
 public class UCSetTitle extends UndoableCommand {
 
@@ -15,9 +16,14 @@ public class UCSetTitle extends UndoableCommand {
 	}
 
 	@Override
-	public void performInternal() {
-		setUndoNotes( Collections.singleton( noteController.getNote() ) );
-		setRedoNotes( Collections.singleton( noteController.setTitle( newTitle ) ) );
+	public boolean performInternal() {
+		final Note oldNote = noteController.setTitle( newTitle );
+		final Note newNote = noteController.getNote();
+
+		setUndoNotes( Collections.singleton( oldNote ) );
+		setRedoNotes( Collections.singleton( newNote ) );
+
+		return !oldNote.equals( newNote );
 	}
 
 }

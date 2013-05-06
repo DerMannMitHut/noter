@@ -17,14 +17,18 @@ public class UCMacro extends UndoableCommand {
 	}
 
 	@Override
-	public void performInternal() {
+	public boolean performInternal() {
 		final ListIterator<UndoableCommand> listIterator = actions.listIterator();
+
+		boolean changed = false;
 		while( listIterator.hasNext() ) {
-			listIterator.next().perform();
+			changed = changed | listIterator.next().perform();
 		}
 
 		setRedoNotes( createRedoNotes() );
 		setUndoNotes( createUndoNotes() );
+
+		return changed;
 	}
 
 	public Object size() {

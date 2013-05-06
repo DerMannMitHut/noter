@@ -8,10 +8,11 @@ public abstract class Command {
 		isSealed = false;
 	}
 
-	final public void perform() {
+	final public boolean perform() {
 		checkNotSealed();
-		performInternal();
+		final boolean changed = performInternal();
 		seal();
+		return changed;
 	}
 
 	final protected void seal() {
@@ -30,6 +31,9 @@ public abstract class Command {
 		}
 	}
 
-	abstract protected void performInternal();
+	/**
+	 * @return true, if something was changed
+	 */
+	abstract protected boolean performInternal();
 
 }

@@ -17,15 +17,19 @@ public class UndoStack<E> {
 
 	public UndoStack(final int capacity) {
 		this.capacity = capacity;
-		undoable = CoWList.empty();
-		redoable = CoWList.empty();
+		clear();
+	}
+
+	public void clear() {
+		undoable = CoWListImpl.empty();
+		redoable = CoWListImpl.empty();
 		undoableSize = 0;
 		redoableSize = 0;
 		undoableSizeInternal = 0;
 	}
 
 	public UndoStack<E> add( final E e ) {
-		redoable = CoWList.empty();
+		redoable = CoWListImpl.empty();
 		undoable = undoable.add( e );
 		redoableSize = 0;
 		undoableSize += 1;
@@ -33,17 +37,19 @@ public class UndoStack<E> {
 		if( undoableSize > capacity ) {
 			undoableSize = capacity;
 		}
-		if( undoableSizeInternal > (undoableSize << 1) ) {
-			undoable = undoable.headList( undoableSize );
-			undoableSizeInternal = undoableSize;
-		}
+		cleanupIfNecessary();
 		return this;
 	}
 
-	public E getNextUndoElement() {
-		if( !hasUndoElement() ) {
-			throw new NoSuchElementException();
+	private void cleanupIfNecessary() {
+		if( (undoableSizeInternal >>> 2) > undoableSize ) {
+			undoable = undoable.headList( undoableSize );
+			undoableSizeInternal = undoableSize;
 		}
+	}
+
+	public E getNextUndoElement() {
+		checkUndoElement();
 		final E e = undoable.head();
 		undoable = undoable.tail();
 		redoable = redoable.add( e );
@@ -53,10 +59,14 @@ public class UndoStack<E> {
 		return e;
 	}
 
-	public Object getNextRedoElement() {
-		if( !hasRedoElement() ) {
+	private void checkUndoElement() {
+		if( !hasUndoElement() ) {
 			throw new NoSuchElementException();
 		}
+	}
+
+	public E getNextRedoElement() {
+		checkRedoElement();
 		final E e = redoable.head();
 		redoable = redoable.tail();
 		undoable = undoable.add( e );
@@ -64,6 +74,12 @@ public class UndoStack<E> {
 		redoableSize -= 1;
 		undoableSizeInternal += 1;
 		return e;
+	}
+
+	private void checkRedoElement() {
+		if( !hasRedoElement() ) {
+			throw new NoSuchElementException();
+		}
 	}
 
 	public int size() {
@@ -76,6 +92,16 @@ public class UndoStack<E> {
 
 	public boolean hasUndoElement() {
 		return undoableSize > 0;
+	}
+
+	public E peekNextRedoElement() {
+		checkRedoElement();
+		return redoable.head();
+	}
+
+	public E peekNextUndoElement() {
+		checkUndoElement();
+		return undoable.head();
 	}
 
 }
